@@ -6,7 +6,7 @@ Used to produce the TNF-response gene control set for enrichment analyses
   GTF → intron coords → sequence fetch → strand-aware output → FASTA
 
 The output FASTA should be placed (or symlinked) at:
-    <experiment_dir>/fasta_files/tnf_controls_peaks.fa
+    <experiment_dir>/fasta_files/tnf_controls_seqs.fa
 
 Then activate the comparison in your config:
     enrichment:
@@ -18,12 +18,12 @@ Usage
 -----
     python scripts/generate_control_fasta.py --config config/my_run.yaml \\
         --gene-list manuscript_runs/tnf_gene_list.txt \\
-        --output /path/to/fasta_files/tnf_controls_peaks.fa
+        --output /path/to/fasta_files/tnf_controls_seqs.fa
 
     # Or use the built-in TNF gene list (LUKE_GENE_LIST):
     python scripts/generate_control_fasta.py --config config/my_run.yaml \\
         --use-tnf-list \\
-        --output /path/to/fasta_files/tnf_controls_peaks.fa
+        --output /path/to/fasta_files/tnf_controls_seqs.fa
 """
 import os
 import sys

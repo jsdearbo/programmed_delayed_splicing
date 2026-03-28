@@ -157,7 +157,7 @@ enrichment:
   run_fimo: true   # Run FIMO (tangermeme)
 
   # Which MoDISco run to use as the motif source
-  source_subset: "all_peaks_modisco"
+  source_subset: "all_seqs_modisco"
   source_flank:  "masked_50bp_flank"
 
   # Pairwise comparisons.  'primary' / 'control' must match groupby_column

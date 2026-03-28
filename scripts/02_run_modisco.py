@@ -98,8 +98,8 @@ def main():
     subsets = []
     if groupby_col and groupby_col in coord_data.columns:
         for val in coord_data[groupby_col].unique():
-            subsets.append((f"{val}_peaks_modisco", coord_data[groupby_col] == val))
-    subsets.append(("all_peaks_modisco", np.ones(len(coord_data), dtype=bool)))
+            subsets.append((f"{val}_seqs_modisco", coord_data[groupby_col] == val))
+    subsets.append(("all_seqs_modisco", np.ones(len(coord_data), dtype=bool)))
 
     for subset_name, mask in subsets:
         subset_coord_full = coord_data[mask].copy()

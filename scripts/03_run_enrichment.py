@@ -105,7 +105,7 @@ def main():
 
     # Which MoDISco run to take motifs from
     enrich_cfg   = cfg.get("enrichment", {})
-    source_subset = enrich_cfg.get("source_subset", "all_peaks_modisco")
+    source_subset = enrich_cfg.get("source_subset", "all_seqs_modisco")
     source_flank  = enrich_cfg.get("source_flank", "masked_50bp_flank")
     comparisons   = enrich_cfg.get("comparisons", [])
     run_sea         = enrich_cfg.get("run_sea", True)
@@ -148,9 +148,9 @@ def main():
     subset_masks = {}
     if groupby_col and groupby_col in coord_data.columns:
         for val in coord_data[groupby_col].unique():
-            label = f"{val}_peaks"
+            label = f"{val}_seqs"
             subset_masks[label] = (coord_data[groupby_col] == val).values
-    subset_masks["all_peaks"] = np.ones(len(coord_data), dtype=bool)
+    subset_masks["all_seqs"] = np.ones(len(coord_data), dtype=bool)
 
     # Generate FASTA files for every subset
     fasta_dir   = os.path.join(experiment_dir, "fasta_files")
@@ -174,10 +174,10 @@ def main():
                 "Generate it first with: python scripts/generate_control_fasta.py "
                 "--config <cfg> --use-tnf-list --output <path>"
             )
-        # Derive the label from the path stem (e.g. tnf_controls_peaks.fa → tnf_controls_peaks)
+        # Derive the label from the path stem (e.g. tnf_controls_seqs.fa → tnf_controls_seqs)
         ctrl_stem = os.path.splitext(os.path.basename(prebuilt_ctrl))[0]
-        if not ctrl_stem.endswith("_peaks"):
-            ctrl_stem = ctrl_stem + "_peaks"
+        if not ctrl_stem.endswith("_seqs"):
+            ctrl_stem = ctrl_stem + "_seqs"
         fasta_paths[ctrl_stem] = prebuilt_ctrl
         logger.info(f"Registered pre-built control FASTA '{ctrl_stem}' → {prebuilt_ctrl}")
 
@@ -190,8 +190,8 @@ def main():
         return
 
     for comp in comparisons:
-        prim_label = f"{comp['primary']}_peaks"
-        ctrl_label = f"{comp['control']}_peaks"
+        prim_label = f"{comp['primary']}_seqs"
+        ctrl_label = f"{comp['control']}_seqs"
         if prim_label not in fasta_paths or ctrl_label not in fasta_paths:
             logger.warning(
                 f"Skipping {prim_label} vs {ctrl_label}: subset FASTA not found."

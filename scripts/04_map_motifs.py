@@ -241,8 +241,8 @@ def discover_modisco_subsets(cfg) -> list:
     """
     Discover modisco subset directories under experiment_dir.
 
-    - RBP mode (multiple runs): directories ending in '_peaks_modisco'
-    - Intron mode (single run): 'modisco' subdirectory
+    - Multi-subset mode (multiple runs): directories ending in '_seqs_modisco'
+    - Single-run mode: 'modisco' subdirectory
     - Fallback: '.' (experiment root) for legacy layouts
     """
     exp_dir = cfg["experiment_dir"]
@@ -254,7 +254,7 @@ def discover_modisco_subsets(cfg) -> list:
 
     rbp_subsets = sorted(
         d for d in entries
-        if d.endswith("_peaks_modisco") and os.path.isdir(os.path.join(exp_dir, d))
+        if d.endswith("_seqs_modisco") and os.path.isdir(os.path.join(exp_dir, d))
     )
     if rbp_subsets:
         logger.info(f"Discovered RBP subsets: {rbp_subsets}")
