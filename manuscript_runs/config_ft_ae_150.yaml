@@ -1,0 +1,68 @@
+# =============================================================================
+# Fig S8b — Adjacent exons, 150 slowest-splicing introns
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# Shared settings
+# ---------------------------------------------------------------------------
+experiment_dir: /mnt/data_sda/jdearborn/scratch/JD_build/testing/20250911/fine_tuned/bottom_150/adjacent_exons
+coord_file_path: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/bottom_150_introns.csv
+gtf_file:        /mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/gencode.vM23.annotation.gtf
+species:         mouse
+model_selection: fine_tuned
+checkpoint_path: /mnt/data_sda/jdearborn/scratch/gReLU_fine_tuning/experiments/20250619_late_high_retention_timepoints/late_high_retention_timepoints/epoch=19-step=11460.ckpt
+task_id:         ENCFF575SGC
+
+# ---------------------------------------------------------------------------
+# Step 1: Get Attributions
+# ---------------------------------------------------------------------------
+centering_mode:       intron_only
+attr_respect_to:      intron_only
+attribution_method:   inputxgradient
+name_col:             intron_name
+
+# ---------------------------------------------------------------------------
+# Step 2: Run MoDISco
+# ---------------------------------------------------------------------------
+mask_mode:       adjacent_exons
+flank:           [-5]
+modisco_len:     5000
+groupby_column:  null
+
+# ---------------------------------------------------------------------------
+# Step 3: Enrichment Analysis
+# ---------------------------------------------------------------------------
+dedupe_overlaps: true
+
+enrichment:
+  run_sea:  true
+  run_fimo: true
+  source_subset: "all_peaks_modisco"
+  source_flank:  "masked_-5bp_flank"
+  # TNF control FASTA — generate once with:
+  #   python scripts/generate_control_fasta.py \
+  #       --config manuscript_runs/config_ft_ae_150.yaml \
+  #       --use-tnf-list \
+  #       --output manuscript_runs/tnf_controls_peaks.fa
+  control_fasta: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/tnf_controls_peaks.fa
+  comparisons:
+    - primary: "all"
+      control: "tnf_controls"
+
+# ---------------------------------------------------------------------------
+# Step 4: Map Motifs
+# ---------------------------------------------------------------------------
+bigwig_dir: /mnt/data_sda/jdearborn/scratch/splice_data_candidates/tc8/mm10/bw_no_norm
+
+motif_mapping:
+  modisco_window:   5000
+  model_seq_len:    524288
+  selection_method: modiscolite
+  attr_respect_to:  adjacent_exons
+  plot:
+    modes:   ["combined", "separate"]
+    figsize: [20, 1.5]
+    topN:    5
+    colors:
+      pos: royalblue
+      neg: crimson

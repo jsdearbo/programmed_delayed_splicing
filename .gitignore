@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environments
+.env
+.venv
+env/
+
+# Outputs — do not commit large data files
+*.pkl
+*.h5
+*.ckpt
+*.bw
+*.fa
+*.fasta
+*.gtf
+*.gtf.gz
+*.bed
+
+# Experiment outputs (keep configs, ignore data)
+outputs/
+testing/
+wandb/
+
+# OS
+.DS_Store
+Thumbs.db

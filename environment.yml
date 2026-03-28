@@ -1,0 +1,49 @@
+name: elife-delay-splice
+channels:
+  - nvidia
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - bedtools>=2.30
+  - pip
+  - pip:
+    # Deep learning
+    - torch>=2.0
+    - pytorch-lightning>=2.0
+
+    # Custom fork of tfmodisco-lite with reverse complementation optional (for use with gReLU)
+    - git+https://github.com/jsdearbo/tfmodisco-lite.git@main
+
+    # gReLU genomics library (includes Borzoi model loading and attribution)
+    # Custom fork with pre-computed attribution functionality for TF-MoDISco
+    - git+https://github.com/jsdearbo/gReLU.git@pre-computed-attr-modisco
+
+    # Fine-tuning experiment tracking
+    - wandb
+
+    # Bioinformatics I/O
+    - h5py>=3.10
+    - pysam>=0.22
+    - pyBigWig>=0.3
+    - genomepy>=0.15
+
+    # Data science
+    - numpy>=1.24,<2.0
+    - pandas>=2.0
+    - scipy>=1.10
+    - scikit-learn>=1.3
+
+    # Visualisation
+    - matplotlib>=3.7
+    - seaborn>=0.13
+    - logomaker>=0.8
+    - adjustText>=1.0
+
+    # Motif scanning (FIMO)
+    - tangermeme==0.4.2
+
+    # Utilities
+    - pyyaml>=6.0
+    - tqdm
