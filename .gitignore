@@ -26,10 +26,14 @@ env/
 *.gtf.gz
 *.bed
 
+# Keep the manuscript TNF control FASTA (small, needed for enrichment)
+!manuscript_runs/*.fa
+
 # Experiment outputs (keep configs, ignore data)
 outputs/
 testing/
 wandb/
+weights/
 
 # OS
 .DS_Store
