@@ -20,7 +20,7 @@ Usage
         --gene-list manuscript_runs/tnf_gene_list.txt \\
         --output /path/to/fasta_files/tnf_controls_seqs.fa
 
-    # Or use the built-in TNF gene list (LUKE_GENE_LIST):
+    # Or use the built-in TNF gene list (TNF_GENE_LIST):
     python scripts/generate_control_fasta.py --config config/my_run.yaml \\
         --use-tnf-list \\
         --output /path/to/fasta_files/tnf_controls_seqs.fa
@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
-# TNF-response gene list (LUKE_GENE_LIST from run_cosi.py)
+# TNF-response gene list
 # These are genes elicited in response to TNFa stimulation and represent
 # the control set used in the manuscript enrichment analyses.
 # ---------------------------------------------------------------------------
