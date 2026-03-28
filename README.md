@@ -82,7 +82,7 @@ conda activate elife-delay-splice
 ## Installation
 
 ```bash
-git clone https://github.com/<your-username>/elife_delay_splice.git
+git clone https://github.com/jsdearbo/elife_delay_splice.git
 cd elife_delay_splice
 conda env create -f environment.yml
 conda activate elife-delay-splice
