@@ -5,12 +5,12 @@
 # ---------------------------------------------------------------------------
 # Shared settings
 # ---------------------------------------------------------------------------
-experiment_dir: /mnt/data_sda/jdearborn/scratch/JD_build/testing/20250911/fine_tuned/bottom_150/intron_only
-coord_file_path: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/bottom_150_introns.csv
-gtf_file:        /mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/gencode.vM23.annotation.gtf
+experiment_dir: results/figS8c_intron_only_bottom150
+coord_file_path: manuscript_runs/bottom_150_introns.csv
+gtf_file:        /path/to/gencode.vM23.annotation.gtf   # download: see README
 species:         mouse
 model_selection: fine_tuned
-checkpoint_path: /mnt/data_sda/jdearborn/scratch/gReLU_fine_tuning/experiments/20250619_late_high_retention_timepoints/late_high_retention_timepoints/epoch=19-step=11460.ckpt
+checkpoint_path: weights/borzoi_mm10_delayed_splicing_finetuned.ckpt  # download: see README
 task_id:         ENCFF575SGC
 
 # ---------------------------------------------------------------------------
@@ -37,14 +37,14 @@ dedupe_overlaps: true
 enrichment:
   run_sea:  true
   run_fimo: true
-  source_subset: "all_peaks_modisco"
+  source_subset: "all_seqs_modisco"
   source_flank:  "masked_-5bp_flank"
   # TNF control FASTA — generate once with:
   #   python scripts/generate_control_fasta.py \
   #       --config manuscript_runs/config_ft_io_150.yaml \
   #       --use-tnf-list \
-  #       --output manuscript_runs/tnf_controls_peaks.fa
-  control_fasta: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/tnf_controls_peaks.fa
+  #       --output manuscript_runs/tnf_controls_seqs.fa
+  control_fasta: manuscript_runs/tnf_controls_seqs.fa
   comparisons:
     - primary: "all"
       control: "tnf_controls"
@@ -52,7 +52,7 @@ enrichment:
 # ---------------------------------------------------------------------------
 # Step 4: Map Motifs
 # ---------------------------------------------------------------------------
-bigwig_dir: /mnt/data_sda/jdearborn/scratch/splice_data_candidates/tc8/mm10/bw_no_norm
+bigwig_dir: /path/to/timecourse_bigwigs   # tc8 timecourse RNA-seq BigWigs (bw_no_norm)
 
 motif_mapping:
   modisco_window:   5000
