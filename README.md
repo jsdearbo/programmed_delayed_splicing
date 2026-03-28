@@ -133,9 +133,20 @@ python scripts/03_run_enrichment.py   --config manuscript_runs/fig_X.yaml
 python scripts/04_map_motifs.py       --config manuscript_runs/fig_X.yaml
 ```
 
-The fine-tuned model checkpoint used in the manuscript is available at:
-`manuscript_runs/checkpoints/epoch=19-step=11460.ckpt`
-[OR: hosted on Zenodo at DOI: TBD]
+The fine-tuned model checkpoint used in the manuscript is available on Zenodo:
+
+```
+DOI: https://doi.org/10.5281/zenodo.19296926
+File: borzoi_mm10_delayed_splicing_finetuned.ckpt
+```
+
+Download it into a `weights/` directory before running the pipeline:
+
+```bash
+mkdir -p weights
+wget -O weights/borzoi_mm10_delayed_splicing_finetuned.ckpt \
+  "https://zenodo.org/records/19296926/files/borzoi_mm10_delayed_splicing_finetuned.ckpt"
+```
 
 ---
 
@@ -156,7 +167,7 @@ coord_file_path: "/path/to/introns.csv"
 gtf_file:        "/path/to/gencode.vM23.annotation.gtf"
 species:         "mouse"
 model_selection: "fine_tuned"
-checkpoint_path: "/path/to/epoch=19-step=11460.ckpt"
+checkpoint_path: "weights/borzoi_mm10_delayed_splicing_finetuned.ckpt"
 ```
 
 See [config/example_config.yaml](config/example_config.yaml) for all options
@@ -196,18 +207,18 @@ experiment_dir/
 ├── element_names_list.pkl        # list of N element names
 ├── attribution_mapping.csv       # coord_index → attribution_index mapping
 │
-├── all_peaks_modisco/
+├── all_seqs_modisco/
 │   └── masked_50bp_flank/
 │       ├── modisco_report.h5     # raw TF-MoDISco output
 │       ├── forward.meme          # de novo motifs (forward strand)
 │       └── combined.meme         # forward + reverse-complement motifs
 │
 ├── fasta_files/
-│   └── all_peaks.fa
+│   └── all_seqs.fa
 │
 ├── enrichment/
-│   └── all_peaks_modisco/
-│       └── primary_peaks_vs_tnf_controls_peaks/
+│   └── all_seqs_modisco/
+│       └── primary_seqs_vs_tnf_controls_seqs/
 │           ├── sea/
 │           │   ├── sea.tsv
 │           │   ├── sea_enrichment.csv
@@ -216,7 +227,7 @@ experiment_dir/
 │               ├── fimo_enrichment.csv
 │               └── fimo_enrichment_scatter.png
 │
-└── all_peaks_modisco/
+└── all_seqs_modisco/
     └── masked_50bp_flank/
         └── plots/
             ├── indexing_df.csv
