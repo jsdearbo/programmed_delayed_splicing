@@ -1,4 +1,4 @@
-# elife_delay_splice — Borzoi Fine-tuning and Splicing Motif Discovery Pipeline
+# Programmed Delayed Splicing — Borzoi Fine-tuning and Splicing Motif Discovery Pipeline
 
 Deep-learning pipeline for identifying sequence features associated with delayed
 co-transcriptional splicing. Fine-tunes the [Borzoi](https://github.com/calico/borzoi)
