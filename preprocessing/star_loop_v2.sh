@@ -17,27 +17,16 @@ read -p "Please enter the species (mouse or human): " SPECIES
 
 # Set Reference genome based on species input
 if [ "$SPECIES" = "mouse" ]; then
-    read -p "Please enter the preferred mouse genome (mm10 or grcm39): " MUS_GENOME
-    if [ "$MUS_GENOME" = "mm10" ]; then
-        REF_GENOME="/bobross/STAR_Metadata/mm10/star_index"
-    elif [ "$MUS_GENOME" = "grcm39" ]; then
-        REF_GENOME="/bobross/STAR_Metadata/mouse/STAR"
-    else
-        echo "Error: Invalid mouse genome. Please specify 'mm10' or 'grcm39'."
-        exit 1
-    fi
+    read -p "Please enter the path to the STAR index directory for mouse: " REF_GENOME
 elif [ "$SPECIES" = "human" ]; then
-    read -p "Please enter the preferred human genome (hg38 or human): " HUM_GENOME
-    if [ "$HUM_GENOME" = "hg38" ]; then
-        REF_GENOME="/bobross/STAR_Metadata/hg38/star_index"
-    elif [ "$HUM_GENOME" = "human" ]; then
-        REF_GENOME="/bobross/STAR_Metadata/human/STAR"
-    else
-        echo "Error: Invalid human genome. Please specify 'hg38' or 'human'."
-        exit 1
-    fi
+    read -p "Please enter the path to the STAR index directory for human: " REF_GENOME
 else
     echo "Error: No reference genome set. Please specify 'mouse' or 'human'."
+    exit 1
+fi
+
+if [ ! -d "$REF_GENOME" ]; then
+    echo "Error: STAR index directory not found at '$REF_GENOME'."
     exit 1
 fi
 

@@ -18,7 +18,13 @@ IFS=$'\n\t'
 #   NORMALIZE=CPM BIN_SIZE=1 THREADS=8 SKIP_DUPLICATES=1 STRANDED=none \
 #     /path/to/bam_dir /path/to/bw_dir
 
-BAM_INPUT_DIR="${1:-${BAM_INPUT_DIR:-/mnt/data_sda/jdearborn/scratch/splice_data_candidates/tc8/mm9/bam}}"
+BAM_INPUT_DIR="${1:-${BAM_INPUT_DIR:-}}"
+
+if [[ -z "$BAM_INPUT_DIR" ]]; then
+  echo "Usage: $0 <bam_input_dir> [bw_output_dir]"
+  echo "       or set BAM_INPUT_DIR env variable"
+  exit 1
+fi
 
 NORMALIZE="${NORMALIZE:-None}"
 BIN_SIZE="${BIN_SIZE:-1}"

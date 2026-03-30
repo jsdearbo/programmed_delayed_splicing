@@ -93,6 +93,48 @@ directly from the repository root by each script.
 
 ---
 
+## Data preprocessing
+
+The BigWig files consumed by Step 0 are derived from raw RNA-seq FASTQs through a two-step process. Scripts for both steps are in the `preprocessing/` directory. Raw FASTQs for the manuscript are deposited at GEO (accession to be added upon publication).
+
+### Step A: FASTQ → BAM (STAR alignment)
+
+```bash
+bash preprocessing/star_loop_v2.sh
+```
+
+The script prompts interactively for species (mouse/human), the path to your STAR index directory, and the directory containing FASTQ files. It handles both paired-end (R1/R2) and single-end reads, and outputs coordinate-sorted BAMs.
+
+**Dependencies:** STAR ≥ 2.7
+
+### Step B: BAM → BigWig
+
+```bash
+bash preprocessing/bam_to_bigwig.sh /path/to/bam_dir [/path/to/bw_dir]
+```
+
+Or with options:
+
+```bash
+NORMALIZE=CPM BIN_SIZE=1 THREADS=8 STRANDED=none \
+  bash preprocessing/bam_to_bigwig.sh /path/to/bam_dir /path/to/bw_dir
+```
+
+Key options (set as environment variables):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `NORMALIZE` | `None` | Normalization method: `None`, `CPM`, `RPKM`, `BPM` |
+| `BIN_SIZE` | `1` | Coverage bin size in bp |
+| `THREADS` | `16` | Parallel threads |
+| `SKIP_DUPLICATES` | `0` | Set to `1` to skip duplicate reads |
+| `STRANDED` | `auto` | Strand mode: `none`, `forward`, `reverse` |
+| `EXTEND` | `auto` | Fragment extension bp; `auto` estimates from read length for single-end |
+
+**Dependencies:** deepTools (`bamCoverage`), samtools
+
+---
+
 ## Input data
 
 ### Coordinate file (required for Steps 1–4)
