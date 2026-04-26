@@ -64,13 +64,13 @@ def main():
     bw_files     = ft["bw_files"]
     lab_len      = int(ft["lab_len"])
     bin_len      = int(ft["bin_len"])
-    batch_size   = int(ft["batch_size"])
     model_params = ft["model_params"]
     train_params = dict(ft.get("train_params") or {})
     trans_func   = ft.get("trans_func")
     tstride      = ft.get("tstride", False)
     blacklist    = ft.get("blacklist", "grelu")
     shift        = ft.get("shift", 0)
+    genome_fasta = ft.get("genome_fasta", cfg.get("genome_fasta"))
     project      = ft.get("project", "elife_delay_splice")
     dataset_cache_dir = ft.get("dataset_cache_dir",
                                os.path.join(ft.get("save_dir",
@@ -88,7 +88,7 @@ def main():
     for f_path, f_name in zip(input_bigwig, bw_name_list):
         logger.info(f"Task: {f_name}  →  {f_path}")
 
-    chromosome_lengths = get_chromosome_lengths(genome)
+    chromosome_lengths = get_chromosome_lengths(genome, genome_fasta=genome_fasta)
     intervals_df = generate_intervals(chromosome_lengths, sequence_length, tstride=tstride)
 
     if blacklist == "grelu":

@@ -15,35 +15,51 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 
-def get_chromosome_lengths(genome: str) -> pd.DataFrame:
+def get_chromosome_lengths(genome: str, genome_fasta: str = None) -> pd.DataFrame:
     """
     Return a DataFrame with columns ['chrom', 'length'] for all sequences
-    in the given genome assembly (as registered with genomepy).
+    in the given genome assembly.
 
     Attempts:
-      1. genomepy Genome object → .sizes file (two-column TSV, no header)
-      2. Fallback: assembly_report.txt in the default genomepy cache dir
+      1. genomepy Genome object -> .sizes file (two-column TSV, no header)
+      2. Optional FASTA index (.fai) if genome_fasta is provided
+      3. Fallback: assembly_report.txt in the default genomepy cache dir
          (~/.local/share/genomes/<genome>/assembly_report.txt)
     """
     try:
         import genomepy
+
         g = genomepy.Genome(genome)
         sizes_file = g.sizes_file
         df = pd.read_csv(sizes_file, sep="\t", header=None, names=["chrom", "length"])
         logger.info(f"Loaded {len(df)} chromosome lengths for {genome} via genomepy")
         return df
     except Exception as e:
-        logger.warning(f"genomepy Genome API failed ({e}), trying assembly_report.txt fallback")
+        logger.warning(f"genomepy Genome API failed ({e}), trying fallback(s)")
 
-    # Fallback: assembly_report.txt in the default cache dir
+    if genome_fasta:
+        fai_path = f"{genome_fasta}.fai"
+        if os.path.exists(fai_path):
+            df = pd.read_csv(
+                fai_path,
+                sep="\t",
+                header=None,
+                usecols=[0, 1],
+                names=["chrom", "length"],
+            )
+            logger.info(f"Loaded {len(df)} chromosome lengths for {genome} from {fai_path}")
+            return df
+        logger.warning(f"FASTA index not found at {fai_path}; continuing fallback chain")
+
     cache_dir = os.path.join(os.path.expanduser("~"), ".local", "share", "genomes")
     assembly_report_path = os.path.join(cache_dir, genome, "assembly_report.txt")
     if not os.path.exists(assembly_report_path):
         raise FileNotFoundError(
             f"Could not find chromosome lengths for '{genome}'. "
-            f"Checked genomepy API and {assembly_report_path}. "
-            "Run: genomepy install <genome>  to download the assembly."
+            f"Checked genomepy API, FASTA index, and {assembly_report_path}. "
+            "Run: genomepy install <genome> to download the assembly, or provide genome_fasta."
         )
+
     assembly_report = pd.read_csv(assembly_report_path, sep="\t")
     df = assembly_report[["UCSC-style-name", "Sequence-Length"]].copy()
     df.columns = ["chrom", "length"]
