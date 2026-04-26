@@ -10,8 +10,10 @@ dependencies:
   - pip
   - pip:
     # Deep learning
-    - torch>=2.0
-    - pytorch-lightning>=2.0
+    # Pin to the stack known to work on this cluster's NVIDIA driver line.
+    # Newer torch wheels can pull CUDA 13 builds that require newer drivers.
+    - torch==2.6.0
+    - pytorch-lightning==2.4.0
 
     # Custom fork of tfmodisco-lite with reverse complementation optional (for use with gReLU)
     - git+https://github.com/jsdearbo/tfmodisco-lite.git@main
@@ -41,8 +43,8 @@ dependencies:
     - logomaker>=0.8
     - adjustText>=1.0
 
-    # Motif scanning (FIMO)
-    - tangermeme==0.4.2
+    # Motif scanning (FIMO); gReLU requires tangermeme>=0.5.0
+    - tangermeme>=0.5.0
 
     # Utilities
     - pyyaml>=6.0
