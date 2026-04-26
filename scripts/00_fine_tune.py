@@ -35,6 +35,33 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 
+def ensure_sizes_file_for_fasta(genome_fasta: str) -> str:
+    """
+    Ensure <genome_fasta>.sizes exists for gReLU CustomGenome usage.
+    Builds it from <genome_fasta>.fai when missing.
+    """
+    fai_path = f"{genome_fasta}.fai"
+    sizes_path = f"{genome_fasta}.sizes"
+
+    if os.path.exists(sizes_path):
+        return sizes_path
+
+    if not os.path.exists(fai_path):
+        raise FileNotFoundError(
+            f"Missing FASTA index required to build sizes file: {fai_path}"
+        )
+
+    with open(fai_path, "r") as fin, open(sizes_path, "w") as fout:
+        for line in fin:
+            fields = line.rstrip("\n").split("\t")
+            if len(fields) < 2:
+                continue
+            fout.write(f"{fields[0]}\t{fields[1]}\n")
+
+    logger.info(f"Created local chromosome sizes file: {sizes_path}")
+    return sizes_path
+
+
 def parse_args():
     p = argparse.ArgumentParser(description="Fine-tune Borzoi on BigWig RNA-seq data")
     p.add_argument("--config", required=True, help="Path to YAML config file")
@@ -84,6 +111,14 @@ def main():
     input_bigwig = [os.path.join(bw_dir, f) for f in bw_files]
     bw_name_list = [os.path.basename(f).split(".")[0] for f in bw_files]
     bw_name      = "__".join(bw_name_list)
+
+    genome_for_dataset = genome
+    if genome_fasta:
+        if not os.path.exists(genome_fasta):
+            raise FileNotFoundError(f"Configured genome_fasta does not exist: {genome_fasta}")
+        ensure_sizes_file_for_fasta(genome_fasta)
+        genome_for_dataset = genome_fasta
+        logger.info(f"Using local FASTA for dataset genome checks: {genome_for_dataset}")
 
     for f_path, f_name in zip(input_bigwig, bw_name_list):
         logger.info(f"Task: {f_name}  →  {f_path}")
@@ -139,7 +174,7 @@ def main():
         dataset_params = {
             "bw_files":            input_bigwig,
             "seq_len":             sequence_length,
-            "genome":              genome,
+            "genome":              genome_for_dataset,
             "end":                 "both",
             "rc":                  True,
             "label_len":           lab_len,
@@ -165,8 +200,6 @@ def main():
     model = grelu.resources.load_model(
         project="borzoi",
         model_name=f"{species}_rep0",
-        train_params=train_params,
-        data_params=data_params,
     )
 
     logger.info(f"Loaded pretrained Borzoi ({species})")
@@ -191,7 +224,7 @@ def main():
     model.tune_on_dataset(
         train_dataset=datasets["train_dataset"],
         val_dataset=datasets["val_dataset"],
-        layers_to_freeze=model_params.get("layers_to_freeze"),
+        # layers_to_freeze=model_params.get("layers_to_freeze"), # dead parameter-- freeze logic is only on private fork. not used in config or current codebase.
     )
 
     logger.info("Fine-tuning complete.")
