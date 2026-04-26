@@ -20,9 +20,11 @@ import logging
 import argparse
 import yaml
 import wandb
+import torch
 
 import grelu.data.preprocess
 import grelu.resources
+import grelu.resources.wandb as grelu_wandb
 from grelu.data.dataset import BigWigSeqDataset
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -73,6 +75,32 @@ def load_config(config_path: str) -> dict:
         return yaml.safe_load(f) or {}
 
 
+def require_usable_cuda_if_requested(train_params: dict):
+    """
+    If config requests GPU devices, fail early with a clear compatibility message
+    when CUDA cannot initialize (common with driver/runtime mismatch).
+    """
+    devices = train_params.get("devices")
+    if devices is None:
+        return
+
+    if isinstance(devices, str) and devices.lower() == "cpu":
+        return
+
+    # Any explicit device list or integer count implies GPU intent.
+    gpu_requested = isinstance(devices, (list, tuple, int))
+    if not gpu_requested:
+        return
+
+    if not torch.cuda.is_available():
+        raise RuntimeError(
+            "CUDA is not available in this environment. Detected torch "
+            f"{torch.__version__} (CUDA {torch.version.cuda}) with an incompatible/older NVIDIA driver. "
+            "Install a PyTorch build compatible with your driver (e.g. CUDA 12.x build), "
+            "or update the NVIDIA driver."
+        )
+
+
 def main():
     args = parse_args()
     cfg  = load_config(args.config)
@@ -107,6 +135,9 @@ def main():
     # Ensure lr is float (YAML may parse 1e-6 as string in some versions)
     if "lr" in train_params:
         train_params["lr"] = float(train_params["lr"])
+
+    # Fail fast on known driver/runtime mismatch before expensive dataset/model work.
+    require_usable_cuda_if_requested(train_params)
 
     input_bigwig = [os.path.join(bw_dir, f) for f in bw_files]
     bw_name_list = [os.path.basename(f).split(".")[0] for f in bw_files]
@@ -197,7 +228,7 @@ def main():
         "test_dataset":  datasets["test_dataset"],
     }
 
-    model = grelu.resources.load_model(
+    model = grelu_wandb.load_model(
         project="borzoi",
         model_name=f"{species}_rep0",
     )
@@ -213,6 +244,7 @@ def main():
     wandb.init(
         project=project,
         name=run_name,
+        settings=wandb.Settings(start_method="thread"),
         config={
             "model_params": model_params,
             "train_params": train_params,
