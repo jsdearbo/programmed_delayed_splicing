@@ -83,7 +83,7 @@ conda activate elife-delay-splice
 
 ```bash
 git clone https://github.com/jsdearbo/programmed_delayed_splicing.git
-cd elife_delay_splice
+cd programmed_delayed_splicing
 conda env create -f environment.yml
 conda activate elife-delay-splice
 ```
