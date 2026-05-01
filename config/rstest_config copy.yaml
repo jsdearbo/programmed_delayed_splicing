@@ -1,0 +1,192 @@
+# =============================================================================
+# elife_delay_splice — Example Configuration
+# =============================================================================
+# All five steps read from this single file.
+# Copy and edit this file for each analysis run; do NOT commit paths that are
+# specific to your local system.
+# Run order: 00 → 01 → 02 → 03 → 04
+# =============================================================================
+
+
+# ---------------------------------------------------------------------------
+# Shared settings (steps 1–4)
+# ---------------------------------------------------------------------------
+
+# Root directory for all attribution/motif outputs from this run
+experiment_dir: "/netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs"
+
+# Coordinate file: one row per intron
+# Required columns: chrom, start, end, strand, unique_ID (or name)
+# Optional columns: expression (up/down subset label)
+coord_file_path: "/netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/manuscript_runs/bottom_150_introns.csv"
+
+# Reference genome GTF (used in steps 3–4 for gene-structure models)
+gtf_file: "/netfiles/dmlabshare1/genomes/STAR/mm10/gencode.vM23.annotation.gtf"
+
+# Reference genome FASTA (optional; used if genomepy is not configured)
+genome_fasta: "/netfiles/dmlabshare1/genomes/STAR/mm10/GRCm38.primary_assembly.genome.fa"
+
+# Species: 'human' or 'mouse'
+species: "mouse"
+
+# genomepy genome name override (optional).
+# Default: 'mouse' → 'mm10', 'human' → 'hg38'.
+# Set this only if genomepy is configured with a different name.
+# genome_name: "mm10"
+
+# Model to use for attribution (steps 1–4):
+#   'pretrained'  — public Borzoi weights downloaded via gReLU
+#   'fine_tuned'  — local checkpoint produced by step 0
+model_selection: "fine_tuned"
+checkpoint_path: "/netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/fine_tune/last_fixed.ckpt"
+
+# ENCODE RNA-seq task ID for the prediction target (used when model_selection='pretrained')
+# For fine-tuned models the task list is inferred from the checkpoint.
+task_id: "ENCFF575SGC"
+
+
+# ---------------------------------------------------------------------------
+# Step 0: Fine-tune Borzoi  (00_fine_tune.py)
+# ---------------------------------------------------------------------------
+
+fine_tuning:
+  project: "elife_delay_splice"    # wandb project name
+  name:    "late_high_retention_timepoints"   # wandb run name
+
+  # Data params
+  trans_func: "log1p"    # label transform: 'log1p', 'log', 'squashed', or null
+  tstride:    false      # true = t-stride walking window; false = non-overlapping tiles
+  shift:      0          # max sequence shift for augmentation (0 = disabled)
+  blacklist:  "grelu"    # blacklist strategy: 'grelu' or 'calico'
+  genome:     "mm10"
+  species:    "mouse"
+  sequence_length: 524288   # Borzoi input length in bp
+
+  # BigWig inputs — paths resolved as <bw_dir>/<file>
+  bw_dir: "/netfiles/dmlabshare1/rstagg/SRA_to_BigWigs/results/LLPC/bw"
+  bw_files:
+    - "SRR6978978.bw"
+    - "SRR6978987.bw"
+
+  lab_len: 196608   # label window in bp (= 6144 bins × 32 bp/bin)
+  bin_len: 32       # bin size in bp
+
+  # Dataset cache dir: pre-built datasets are pickled here to skip re-processing
+  # on subsequent runs.  Set to a stable location outside experiment_dir.
+  dataset_cache_dir: "/netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/dataset_cache"
+
+  # Model architecture overrides
+  model_params:
+    model_type:       "BorzoiModel"
+    crop_len:         5120       # output crop (bp); matches published Borzoi
+    n_transformers:   8          # number of transformer blocks
+    final_act_func:   "softplus"
+    final_pool_func:  null
+    layers_to_freeze: null       # e.g. ["embedding.conv_tower"] to freeze
+
+  # Training hyperparameters (passed to gReLU LightningModel)
+  train_params:
+    task:        "regression"
+    loss:        "mse"
+    lr:          1.0e-6
+    logger:      "wandb"
+    batch_size:  2
+    num_workers: 1
+    devices:     [0, 1]          # GPU indices
+    save_dir:    "/netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/fine_tune"
+    optimizer:   "adam"
+    max_epochs:  20
+    checkpoint:
+      monitor:   "val_loss"
+      mode:      "min"
+      save_last: true
+      dirpath:   "/netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/fine_tune"
+
+  # Only required if blacklist='calico':
+  # calico_blacklist_path: "/path/to/blacklist_mm10_all.bed"
+
+
+# ---------------------------------------------------------------------------
+# Step 1: Get Attributions  (01_get_attributions.py)
+# ---------------------------------------------------------------------------
+
+# How to centre the input window on each intron:
+#   'intron_only'      — centre on the intron itself (recommended for splicing)
+#   'element_only'     — alias for intron_only
+#   'whole_transcript' — centre on the full transcript (requires tscript_start/end cols)
+centering_mode: "intron_only"
+
+# Genomic region over which Borzoi predictions are aggregated before computing
+# gradients.  Typically matches centering_mode.
+attr_respect_to: "intron_only"
+
+# Attribution method: 'inputxgradient' (fast, recommended) or 'saliency'
+attribution_method: "inputxgradient"
+
+# Column in coord_file used as the element identifier
+name_col: "intron_name"
+
+
+# ---------------------------------------------------------------------------
+# Step 2: Run MoDISco  (02_run_modisco.py)
+# ---------------------------------------------------------------------------
+
+# Masking strategy:
+#   'intron_only' — zero out signal outside intron ± flank (recommended)
+#   'element_only' — alias for intron_only
+mask_mode: "intron_only"
+
+# Flank size(s) in bp. A separate MoDISco run is produced for each value.
+flank: [50]
+
+# MoDISco seqlet search window (bp).  Set to match expected motif size.
+modisco_len: 1000
+
+# Column in coord_file to split data into subsets (optional).
+# Set to null to run on the full dataset only.
+groupby_column: null
+
+
+# ---------------------------------------------------------------------------
+# Step 3: Enrichment Analysis  (03_run_enrichment.py)
+# ---------------------------------------------------------------------------
+
+enrichment:
+  run_sea:  true   # Run SEA (MEME Suite Simple Enrichment Analysis)
+  run_fimo: true   # Run FIMO (tangermeme)
+
+  # Which MoDISco run to use as the motif source
+  source_subset: "all_seqs_modisco"
+  source_flank:  "masked_50bp_flank"
+
+  # Pairwise comparisons.  'primary' / 'control' must match groupby_column
+  # values, or 'all' for the full dataset.
+  comparisons:
+    - primary: "primary"
+      control: "tnf_controls"
+
+
+# ---------------------------------------------------------------------------
+# Step 4: Map Motifs  (04_map_motifs.py)
+# ---------------------------------------------------------------------------
+
+motif_mapping:
+  # modisco_window must match modisco_len from step 2
+  modisco_window:   1000
+  model_seq_len:    524288   # Borzoi full input length (do not change)
+  selection_method: "modiscolite"
+
+  # Must match attr_respect_to from step 1
+  attr_respect_to: "intron_only"
+
+  plot:
+    modes:   ["combined", "separate"]
+    figsize: [20, 1.5]   # (width, height) per gene-map row
+
+  # Optional: restrict which patterns are plotted
+  # motifs_of_interest: ["pos_pattern_0", "pos_pattern_1"]
+  # motif_regex: "pos_"
+  # motif_limit: 10
+
+  # Optional: directory containing BigWig files for read-density track overlays
+  # bigwig_dir: "/path/to/bigwigs"

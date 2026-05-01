@@ -38,3 +38,6 @@ weights/
 # OS
 .DS_Store
 Thumbs.db
+
+# RS
+rstest_outputs/

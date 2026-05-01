@@ -3,7 +3,7 @@ Step 1 — Compute per-nucleotide attributions for each element/peak.
 
 Usage
 -----
-    python scripts/01_get_attributions.py --config config/example_config.yaml
+    python scripts/01_get_attributions.py --config config/rstest_config copy.yaml
 
 Outputs (written to experiment_dir/)
 -------------------------------------

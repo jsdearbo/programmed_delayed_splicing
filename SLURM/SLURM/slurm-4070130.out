@@ -1,0 +1,36 @@
+[Fri May  1 03:09:26 PM EDT 2026] Host:          r6node02
+[Fri May  1 03:09:26 PM EDT 2026] Working dir:   /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing
+[Fri May  1 03:09:26 PM EDT 2026] Conda env:     /users/r/s/rstagg/.conda/envs/elife-delay-splice
+[Fri May  1 03:09:26 PM EDT 2026] Python:        Python 3.11.15
+[Fri May  1 03:09:26 PM EDT 2026] PyTorch:       2.11.0+cu130
+[Fri May  1 03:09:32 PM EDT 2026] CUDA avail:    True
+[Fri May  1 03:09:35 PM EDT 2026] GPUs visible:  0
+Fri May  1 15:09:35 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.95.05              Driver Version: 580.95.05      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX PRO 6000 Blac...    On  |   00000001:DA:00.0 Off |                    0 |
+| N/A   35C    P8             32W /  600W |       0MiB /  97887MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Extracting sequence for chr12:113157856-113682144...
+Loading fine-tuned model...
+inference w fine tuned model...
+Fine-tuned predictions saved to /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/ft_ighm_preds.npy
+Loading pre-trained model...
+Running inference with pre-trained model...
+Pre-trained predictions saved to /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/pt_ighm_preds.npy
+Inference completed successfully.
+[Fri May  1 03:10:06 PM EDT 2026] Inference complete.

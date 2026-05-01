@@ -64,7 +64,7 @@ def load_model(species: str, model_selection: str = None, checkpoint_path: str =
             )
             logger.info(f"Fine-tuned model loaded from {checkpoint_path} on {device}")
         else:
-            model = grelu.resources.load_model(project="borzoi", model_name=f"{species}_rep0")
+            model = grelu.resources.load_model(repo_id="Genentech/borzoi-model", filename=f"{species}_rep0.ckpt", device=device)
             logger.info(f"Pretrained Borzoi model for {species} loaded on {device}")
 
         return model.to(device), device

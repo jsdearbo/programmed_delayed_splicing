@@ -1,0 +1,3 @@
+/gpfs1/sw/rh9/lmod/8.7.64/init/bash: line 112: PS1: unbound variable
+/gpfs1/sw/rh9/lmod/8.7.64/init/bash: line 112: PS1: unbound variable
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0

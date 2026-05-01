@@ -1,0 +1,80 @@
+/gpfs1/sw/rh9/lmod/8.7.64/init/bash: line 112: PS1: unbound variable
+/gpfs1/sw/rh9/lmod/8.7.64/init/bash: line 112: PS1: unbound variable
+2026-04-29 17:28:18,104 - INFO - Task: SRR6978978  →  /netfiles/dmlabshare1/rstagg/SRA_to_BigWigs/results/LLPC/bw/SRR6978978.bw
+2026-04-29 17:28:18,104 - INFO - Task: SRR6978987  →  /netfiles/dmlabshare1/rstagg/SRA_to_BigWigs/results/LLPC/bw/SRR6978987.bw
+2026-04-29 17:28:18,122 - INFO - Loaded 66 chromosome lengths for mm10 via genomepy
+2026-04-29 17:28:18,129 - INFO - Generated 5190 intervals (tstride=False)
+2026-04-29 17:28:18,184 - INFO - Unique interval lengths in train: 1
+2026-04-29 17:28:18,198 - INFO - Loading cached datasets from /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/dataset_cache/grelu/no_stride/no_shift/SRR6978978__SRR6978987/log1p
+2026-04-29 17:28:35,426 - INFO - Loaded train_dataset from /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/dataset_cache/grelu/no_stride/no_shift/SRR6978978__SRR6978987/log1p/train_dataset.pkl
+2026-04-29 17:28:36,195 - INFO - Loaded val_dataset from /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/dataset_cache/grelu/no_stride/no_shift/SRR6978978__SRR6978987/log1p/val_dataset.pkl
+2026-04-29 17:28:37,101 - INFO - Loaded test_dataset from /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/rstest_outputs/dataset_cache/grelu/no_stride/no_shift/SRR6978978__SRR6978987/log1p/test_dataset.pkl
+wandb: WARNING The anonymous parameter to wandb.login() has no effect and will be removed in future versions.
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /users/r/s/rstagg/.netrc.
+wandb: Currently logged in as: rstagg (rstagg-university-of-vermont) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 295656 bytes
+wandb: WARNING Serializing object of type list that is 295656 bytes
+wandb: WARNING Serializing object of type list that is 295656 bytes
+wandb: Downloading large artifact 'mouse_rep0:latest', 673.94MB. 1 files...
+wandb:   1 of 1 files downloaded.  
+Done. 00:00:14.5 (46.5MB/s)
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+2026-04-29 17:28:59,749 - INFO - Loaded pretrained Borzoi (mouse)
+2026-04-29 17:28:59,749 - INFO - Updating model hyperparameters
+wandb: WARNING `start_method` is deprecated and will be removed in a future version of wandb. This setting is currently non-functional and safely ignored.
+wandb: setting up run 1uu9o8yb
+wandb: Tracking run with wandb version 0.26.1
+wandb: Run data is saved locally in /netfiles/dmlabshare1/rstagg/programmed_delayed_splicing/wandb/run-20260429_172859-1uu9o8yb
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run late_high_retention_timepoints
+wandb: ⭐️ View project at https://wandb.ai/rstagg-university-of-vermont/elife_delay_splice
+wandb: 🚀 View run at https://wandb.ai/rstagg-university-of-vermont/elife_delay_splice/runs/1uu9o8yb
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+[W429 17:29:02.539635124 socket.cpp:764] [c10d] The client socket cannot be initialized to connect to [r6node04.cluster]:19749 (errno: 97 - Address family not supported by protocol).
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/loggers/wandb.py:396: There is a wandb run already in progress and newly created instances of `WandbLogger` will reuse this run. If this is not desired, call `wandb.finish()` before instantiating `WandbLogger`.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:215: Using `DistributedSampler` with the dataloaders. During `trainer.validate()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:424: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=3` in the `DataLoader` to improve performance.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:431: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:431: It is recommended to use `self.log('val_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:431: It is recommended to use `self.log('val_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name         | Type             | Params | Mode 
+----------------------------------------------------------
+0 | model        | BorzoiModel      | 171 M  | train
+1 | loss         | MSELoss          | 0      | train
+2 | activation   | Identity         | 0      | train
+3 | val_metrics  | MetricCollection | 0      | train
+4 | test_metrics | MetricCollection | 0      | train
+5 | transform    | Identity         | 0      | train
+----------------------------------------------------------
+171 M     Trainable params
+0         Non-trainable params
+171 M     Total params
+685.103   Total estimated model params size (MB)
+399       Modules in train mode
+0         Modules in eval mode
+SLURM auto-requeueing enabled. Setting signal handlers.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:424: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=3` in the `DataLoader` to improve performance.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:424: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=3` in the `DataLoader` to improve performance.
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/torch/autograd/graph.py:869: UserWarning: The AccumulateGrad node's stream does not match the stream of the node that produced the incoming gradient. This may incur unnecessary synchronization and break CUDA graph capture if the AccumulateGrad node's stream is the default stream. This mismatch is caused by an AccumulateGrad node created prior to the current iteration being kept alive. This can happen if the autograd graph is still being kept alive by tensors such as the loss, or if you are using DDP, which will stash a reference to the node. To resolve the mismatch, delete all references to the autograd graph or ensure that DDP initialization is performed under the same stream as subsequent forwards. If the mismatch is intentional, you can use torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch(False) to suppress this warning. (Triggered internally at /pytorch/torch/csrc/autograd/input_buffer.cpp:240.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/users/r/s/rstagg/.conda/envs/elife-delay-splice/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:431: It is recommended to use `self.log('train_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+`Trainer.fit` stopped: `max_epochs=20` reached.
+2026-04-29 19:26:43,223 - INFO - Fine-tuning complete.
