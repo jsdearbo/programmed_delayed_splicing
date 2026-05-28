@@ -9,7 +9,7 @@ and measures motif enrichment between regulatory subsets.
 
 This pipeline reproduces the figures in:
 
-> This analysis: Dearborn J.S., Frankiw L., Limoge D.W., Burns C.H., Vlach L., Turpin P., Kirch T., Miller Z.D., Dowell W., Languon S., Garcia‑Flores Y., Cockrell R.C., Baltimore D., Majumdar D. *Programmed Delayed Splicing: A Mechanism for Timed Inflammatory Gene Expression*. eLife (manuscript under review, 2026).
+> Dearborn J.S., Frankiw L., Limoge D.W., Burns C.H., Vlach L., Turpin P., Kirch T., Miller Z.D., Dowell W., Languon S., Garcia‑Flores Y., Cockrell R.C., Baltimore D., Majumdar D. *Programmed Delayed Splicing: A Mechanism for Timed Inflammatory Gene Expression*. eLife (2026). https://doi.org/10.7554/eLife.109726.1
 
 ---
 
