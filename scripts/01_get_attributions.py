@@ -90,10 +90,15 @@ def main():
     logger.info(f"Using device: {device_str}")
 
     # Select RNA tasks for this experiment
-    tasks = load_tasks(model)
     if model_selection == "fine_tuned":
-        tasks_list = tasks["name"].tolist()
+        # Fine-tuned models have a custom head; data_params["tasks"] reflects the
+        # pretrained model and cannot be used for name lookup.  Use integer indices.
+        from lora_patch import _unwrap_borzoi_model
+        head = _unwrap_borzoi_model(model).head
+        n_tasks = getattr(head, "n_tasks", 3)
+        tasks_list = list(range(n_tasks))
     else:
+        tasks = load_tasks(model)
         tasks_list = tasks[tasks["name"].str.contains(task_id, na=False)]["name"].tolist()
     logger.info(f"Tasks selected ({len(tasks_list)}): {tasks_list[:5]} ...")
 
@@ -110,15 +115,25 @@ def main():
         genome_name=genome_name,
     )
 
-    # Compute attributions
+    # Compute attributions — track only successful elements so all outputs stay in sync
+    seq_len = model.data_params['train']['seq_len']
     attributions_list = []
+    successful_inputs = []
     for item in element_inputs:
         try:
             logger.info(f"Processing: {item.name}")
+            # Pad short sequences (e.g. near chromosome boundary) to seq_len with Ns
+            seq = item.sequence
+            if len(seq) < seq_len:
+                logger.warning(
+                    f"{item.name}: sequence length {len(seq)} < {seq_len}; "
+                    f"right-padding with Ns"
+                )
+                seq = seq + 'N' * (seq_len - len(seq))
             selected_bins = get_eval_bins(model, item.input_intervals, item.eval_intervals)
             attrs = get_attributions_for_element(
                 model=model,
-                input_seq=item.sequence,
+                input_seq=seq,
                 selected_bins=selected_bins,
                 tasks_to_plot_list=tasks_list,
                 device=device_str,
@@ -127,6 +142,8 @@ def main():
                 batch_size=1,
             )
             attributions_list.append(attrs)
+            item = item._replace(sequence=seq) if hasattr(item, '_replace') else item
+            successful_inputs.append((item, seq))
         except Exception as e:
             logger.exception(f"Failed for {item.name}: {e}")
         finally:
@@ -136,10 +153,10 @@ def main():
                 pass
             gc.collect()
 
-    # Save outputs
+    # Save outputs — only successful elements, so attributions/seqs/names are aligned
     final_attributions = np.concatenate(attributions_list, axis=0)
-    names_list   = [inp.name for inp in element_inputs]
-    input_seqs   = [inp.sequence for inp in element_inputs]
+    names_list   = [item.name for item, _ in successful_inputs]
+    input_seqs   = [seq       for _, seq  in successful_inputs]
 
     with open(os.path.join(experiment_dir, "attributions.pkl"), "wb") as f:
         pickle.dump(final_attributions, f)
@@ -148,8 +165,10 @@ def main():
     with open(os.path.join(experiment_dir, "element_names_list.pkl"), "wb") as f:
         pickle.dump(names_list, f)
 
+    name_to_coord = {str(row[name_col or 'unique_ID']): idx
+                     for idx, row in coord_data.iterrows()}
     mapping_df = pd.DataFrame({
-        "coord_index":       coord_data.index[:len(element_inputs)],
+        "coord_index":       [name_to_coord.get(n, -1) for n in names_list],
         "name":              names_list,
         "attribution_index": range(len(names_list)),
     })
