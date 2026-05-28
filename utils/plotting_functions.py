@@ -779,6 +779,15 @@ def _select_elements_for_sequence(elements_df: pd.DataFrame, seq_name: str) -> p
             logging.info(f"[select_elements] Strategy C matched gene_name contains '{base}' ({len(subset)} rows)")
             return subset
 
+    # Strategy D: extract gene symbol from __ delimited unique_ID (e.g. B_Cell__SE__Slk__chr19_...)
+    parts = seq_name.split("__")
+    if len(parts) >= 3 and "gene_name" in elements_df.columns:
+        gene_candidate = parts[2]
+        subset = elements_df[elements_df["gene_name"] == gene_candidate].copy()
+        if not subset.empty:
+            logging.info(f"[select_elements] Strategy D matched gene_name '{gene_candidate}' from unique_ID ({len(subset)} rows)")
+            return subset
+
     logging.warning(f"[select_elements] No elements found for '{seq_name}'")
     return pd.DataFrame()
 
@@ -1140,10 +1149,12 @@ def plot_logo_gene_map_and_read_densities(
         end=plot_end
     )
     
-    # Apply RBP highlight (Orange) to Gene Map
-    if element_highlight_bounds is not None:
+    # Apply RBP highlight (Orange) to Gene Map — only when elements are present
+    # (without elements, plot_gene_map doesn't set xlim, so genomic-scale coords
+    # on a clip_on=False axvspan would produce a multi-billion-pixel figure)
+    if element_highlight_bounds is not None and not seq_elements_df.empty:
         el_left, el_right = element_highlight_bounds
-        ax_gene.axvspan(el_left, el_right, alpha=0.5, color="orange", zorder=100, clip_on=False, linewidth=0, label="RBP Site")
+        ax_gene.axvspan(el_left, el_right, alpha=0.5, color="orange", zorder=100, clip_on=True, linewidth=0, label="RBP Site")
 
     # Bottom: Tracks (if any)
     if n_tracks > 0 and not seq_elements_df.empty:
