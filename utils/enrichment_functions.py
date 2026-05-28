@@ -2,6 +2,7 @@
 Motif enrichment utilities: SEA (MEME Suite), FIMO (tangermeme),
 MEME file I/O, and Modisco H5 conversion.
 """
+
 import os
 import logging
 import subprocess
@@ -29,7 +30,9 @@ def check_dependencies():
     if fimo is None:
         logger.warning("tangermeme not found. FIMO functions will fail.")
     if subprocess.call("which sea", shell=True, stdout=subprocess.DEVNULL) != 0:
-        logger.warning("MEME Suite 'sea' tool not found in PATH. SEA functions will fail.")
+        logger.warning(
+            "MEME Suite 'sea' tool not found in PATH. SEA functions will fail."
+        )
 
 
 def _validate_dna_sequences(seqs: List[str]) -> List[str]:
@@ -66,19 +69,25 @@ def write_fasta(sequences: List[str], names: List[str], output_path: str):
 # Motif Conversion
 # ---------------------------------------------------------------------------
 
+
 def reverse_complement_ppm(ppm: np.ndarray) -> np.ndarray:
     """Generate the reverse complement of a position probability matrix (PPM)."""
     complement_indices = [3, 2, 1, 0]  # A↔T, C↔G
     return ppm[complement_indices, ::-1]
 
 
-def reverse_complement_motifs_dict(motifs: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
+def reverse_complement_motifs_dict(
+    motifs: Dict[str, np.ndarray],
+) -> Dict[str, np.ndarray]:
     """Return a new dict with reverse-complement PPMs for every entry."""
     return {f"{key}_rc": reverse_complement_ppm(value) for key, value in motifs.items()}
 
 
-def write_motifs_to_meme(motifs: Dict[str, Any], output_file: str,
-                          background: Optional[Dict[str, float]] = None):
+def write_motifs_to_meme(
+    motifs: Dict[str, Any],
+    output_file: str,
+    background: Optional[Dict[str, float]] = None,
+):
     """
     Write a motif dictionary to a MEME-format file.
 
@@ -92,7 +101,7 @@ def write_motifs_to_meme(motifs: Dict[str, Any], output_file: str,
             bg_line = " ".join(f"{b} {background[b]}" for b in "ACGT")
             f.write(f"Background letter frequencies:\n{bg_line}\n\n")
             for name, ppm in motifs.items():
-                if hasattr(ppm, 'numpy'):
+                if hasattr(ppm, "numpy"):
                     ppm = ppm.numpy()
                 elif isinstance(ppm, list):
                     ppm = np.array(ppm)
@@ -131,10 +140,10 @@ def convert_modisco_h5_to_meme(report_file: str, output_dir: str):
         logger.info(f"Loading motifs from {report_file}")
         modisco_output = grelu_motifs.read_modisco_report(report_file)
         rc_motifs = reverse_complement_motifs_dict(modisco_output)
-        write_motifs_to_meme(modisco_output,
-                              os.path.join(output_dir, "forward.meme"))
-        write_motifs_to_meme({**modisco_output, **rc_motifs},
-                              os.path.join(output_dir, "combined.meme"))
+        write_motifs_to_meme(modisco_output, os.path.join(output_dir, "forward.meme"))
+        write_motifs_to_meme(
+            {**modisco_output, **rc_motifs}, os.path.join(output_dir, "combined.meme")
+        )
     except Exception as e:
         logger.error(f"Error converting MoDISco H5 to MEME: {e}")
 
@@ -143,8 +152,14 @@ def convert_modisco_h5_to_meme(report_file: str, output_dir: str):
 # SEA (MEME Suite)
 # ---------------------------------------------------------------------------
 
-def run_sea(primary_fasta: str, control_fasta: str, meme_file: str,
-             output_dir: str, thresh: float = 1.0e6) -> pd.DataFrame:
+
+def run_sea(
+    primary_fasta: str,
+    control_fasta: str,
+    meme_file: str,
+    output_dir: str,
+    thresh: float = 1.0e6,
+) -> pd.DataFrame:
     """
     Run SEA (Simple Enrichment Analysis) from the MEME Suite.
 
@@ -152,18 +167,28 @@ def run_sea(primary_fasta: str, control_fasta: str, meme_file: str,
     """
     os.makedirs(output_dir, exist_ok=True)
     cmd = [
-        "sea", "--verbosity", "1",
-        "--oc", output_dir,
-        "--thresh", str(thresh),
-        "--align", "center",
-        "--p", os.path.abspath(primary_fasta),
-        "--n", os.path.abspath(control_fasta),
-        "--m", os.path.abspath(meme_file),
+        "sea",
+        "--verbosity",
+        "1",
+        "--oc",
+        output_dir,
+        "--thresh",
+        str(thresh),
+        "--align",
+        "center",
+        "--p",
+        os.path.abspath(primary_fasta),
+        "--n",
+        os.path.abspath(control_fasta),
+        "--m",
+        os.path.abspath(meme_file),
     ]
     logger.info(f"Running SEA: {' '.join(cmd)}")
     res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if res.returncode != 0:
-        raise RuntimeError(f"SEA failed (exit {res.returncode}).\nSTDERR:\n{res.stderr}")
+        raise RuntimeError(
+            f"SEA failed (exit {res.returncode}).\nSTDERR:\n{res.stderr}"
+        )
     tsv_path = os.path.join(output_dir, "sea.tsv")
     if not os.path.exists(tsv_path):
         raise FileNotFoundError(f"SEA completed but {tsv_path} not found.")
@@ -173,6 +198,7 @@ def run_sea(primary_fasta: str, control_fasta: str, meme_file: str,
 # ---------------------------------------------------------------------------
 # FIMO (tangermeme)
 # ---------------------------------------------------------------------------
+
 
 def _count_seqs_in_fasta(fasta_path: str) -> int:
     count = 0
@@ -205,19 +231,30 @@ def _get_hit_percentage(fimo_hits, total_seqs: int) -> dict:
     fimo_df = _normalize_fimo_output(fimo_hits)
     if fimo_df.empty:
         return {}
-    seq_col   = next((c for c in ["sequence_name", "sequence_id", "seq_name"]
-                      if c in fimo_df.columns), None)
-    motif_col = next((c for c in ["motif_name", "motif_id"]
-                      if c in fimo_df.columns), None)
+    seq_col = next(
+        (
+            c
+            for c in ["sequence_name", "sequence_id", "seq_name"]
+            if c in fimo_df.columns
+        ),
+        None,
+    )
+    motif_col = next(
+        (c for c in ["motif_name", "motif_id"] if c in fimo_df.columns), None
+    )
     if seq_col and motif_col:
         counts = fimo_df.groupby(motif_col)[seq_col].nunique()
         return {m: (n / total_seqs) * 100.0 for m, n in counts.items()}
     return {}
 
 
-def run_fimo_enrichment(motifs: Dict[str, Any], primary_fasta: str,
-                         control_fasta: str, output_dir: str,
-                         threshold: float = 1e-4) -> pd.DataFrame:
+def run_fimo_enrichment(
+    motifs: Dict[str, Any],
+    primary_fasta: str,
+    control_fasta: str,
+    output_dir: str,
+    threshold: float = 1e-4,
+) -> pd.DataFrame:
     """
     Run FIMO on primary and control FASTA files and return per-motif
     hit percentages as a DataFrame.
@@ -245,14 +282,22 @@ def run_fimo_enrichment(motifs: Dict[str, Any], primary_fasta: str,
     logger.info(f"FIMO: {total_primary} primary seqs, {total_control} control seqs")
 
     try:
-        primary_results = fimo(motifs=validated_motifs,
-                                sequences=os.path.abspath(primary_fasta),
-                                reverse_complement=False, dim=0, threshold=threshold)
+        primary_results = fimo(
+            motifs=validated_motifs,
+            sequences=os.path.abspath(primary_fasta),
+            reverse_complement=False,
+            dim=0,
+            threshold=threshold,
+        )
         pct_primary = _get_hit_percentage(primary_results, total_primary)
 
-        control_results = fimo(motifs=validated_motifs,
-                                sequences=os.path.abspath(control_fasta),
-                                reverse_complement=False, dim=0, threshold=threshold)
+        control_results = fimo(
+            motifs=validated_motifs,
+            sequences=os.path.abspath(control_fasta),
+            reverse_complement=False,
+            dim=0,
+            threshold=threshold,
+        )
         pct_control = _get_hit_percentage(control_results, total_control)
     except Exception as e:
         logger.error(f"FIMO run failed: {e}")
@@ -261,9 +306,9 @@ def run_fimo_enrichment(motifs: Dict[str, Any], primary_fasta: str,
     all_motifs = set(pct_primary) | set(pct_control) | set(validated_motifs)
     rows = [
         {
-            'motif_name':             m,
-            'percent_match_primary':  pct_primary.get(m, 0.0),
-            'percent_match_ctrl':     pct_control.get(m, 0.0),
+            "motif_name": m,
+            "percent_match_primary": pct_primary.get(m, 0.0),
+            "percent_match_ctrl": pct_control.get(m, 0.0),
         }
         for m in sorted(all_motifs)
     ]
@@ -277,38 +322,50 @@ def run_fimo_enrichment(motifs: Dict[str, Any], primary_fasta: str,
 # Visualisation
 # ---------------------------------------------------------------------------
 
-def plot_motif_scatter(df: pd.DataFrame,
-                       x_col: str = 'percent_match_ctrl',
-                       y_col: str = 'percent_match_primary',
-                       label_col: str = 'motif_name',
-                       title: str = "Motif Enrichment",
-                       save_path: Optional[str] = None,
-                       top_n: int = 10):
+
+def plot_motif_scatter(
+    df: pd.DataFrame,
+    x_col: str = "percent_match_ctrl",
+    y_col: str = "percent_match_primary",
+    label_col: str = "motif_name",
+    title: str = "Motif Enrichment",
+    save_path: Optional[str] = None,
+    top_n: int = 10,
+):
     """Scatter plot of primary vs control motif-hit percentages."""
     if df.empty:
         logger.warning("Empty DataFrame — nothing to plot.")
         return
     df = df.copy()
-    df['log2fc'] = np.log2((df[y_col] + 0.1) / (df[x_col] + 0.1))
+    df["log2fc"] = np.log2((df[y_col] + 0.1) / (df[x_col] + 0.1))
     plt.figure(figsize=(8, 8))
     sns.set_style("whitegrid")
-    sns.scatterplot(data=df, x=x_col, y=y_col, hue='log2fc',
-                    palette='vlag', edgecolor='k', s=100, alpha=0.8)
+    sns.scatterplot(
+        data=df,
+        x=x_col,
+        y=y_col,
+        hue="log2fc",
+        palette="vlag",
+        edgecolor="k",
+        s=100,
+        alpha=0.8,
+    )
     max_val = max(df[x_col].max(), df[y_col].max())
     plt.plot([0, max_val], [0, max_val], ls="--", c=".3")
     texts = []
-    df_sorted = df.sort_values('log2fc', ascending=False)
+    df_sorted = df.sort_values("log2fc", ascending=False)
     for i in range(min(top_n, len(df))):
         row = df_sorted.iloc[i]
-        if row['log2fc'] > 0.5:
+        if row["log2fc"] > 0.5:
             texts.append(plt.text(row[x_col], row[y_col], row[label_col], fontsize=9))
     for i in range(min(top_n, len(df))):
         row = df_sorted.iloc[-(i + 1)]
-        if row['log2fc'] < -0.5:
+        if row["log2fc"] < -0.5:
             texts.append(plt.text(row[x_col], row[y_col], row[label_col], fontsize=9))
     try:
         from adjustText import adjust_text
-        adjust_text(texts, arrowprops=dict(arrowstyle='-', color='gray', lw=0.5))
+
+        adjust_text(texts, arrowprops=dict(arrowstyle="-", color="gray", lw=0.5))
     except ImportError:
         pass
     plt.title(title)
@@ -327,10 +384,15 @@ def plot_motif_scatter(df: pd.DataFrame,
 # Main Orchestrator
 # ---------------------------------------------------------------------------
 
-def run_enrichment_analysis(primary_fasta: str, control_fasta: str,
-                             meme_file: str, output_dir: str,
-                             run_sea_tool: bool = True,
-                             run_fimo_tool: bool = True):
+
+def run_enrichment_analysis(
+    primary_fasta: str,
+    control_fasta: str,
+    meme_file: str,
+    output_dir: str,
+    run_sea_tool: bool = True,
+    run_fimo_tool: bool = True,
+):
     """
     Run SEA and/or FIMO enrichment analysis for one primary/control FASTA pair.
 
@@ -346,15 +408,18 @@ def run_enrichment_analysis(primary_fasta: str, control_fasta: str,
         if not os.path.exists(os.path.join(sea_dir, "sea.tsv")):
             try:
                 sea_results = run_sea(primary_fasta, control_fasta, meme_file, sea_dir)
-                sea_df = pd.DataFrame({
-                    "motif_name":            sea_results["ID"],
-                    "percent_match_primary": sea_results["TP%"],
-                    "percent_match_ctrl":    sea_results["FP%"],
-                })
+                sea_df = pd.DataFrame(
+                    {
+                        "motif_name": sea_results["ID"],
+                        "percent_match_primary": sea_results["TP%"],
+                        "percent_match_ctrl": sea_results["FP%"],
+                    }
+                )
                 sea_df.to_csv(os.path.join(sea_dir, "sea_enrichment.csv"), index=False)
                 plot_motif_scatter(
-                    sea_df, title="SEA Enrichment: Primary vs Control",
-                    save_path=os.path.join(sea_dir, "sea_enrichment_scatter.png")
+                    sea_df,
+                    title="SEA Enrichment: Primary vs Control",
+                    save_path=os.path.join(sea_dir, "sea_enrichment_scatter.png"),
                 )
             except Exception as e:
                 logger.error(f"SEA analysis failed: {e}")
@@ -376,8 +441,9 @@ def run_enrichment_analysis(primary_fasta: str, control_fasta: str,
                     threshold=0.001,
                 )
                 plot_motif_scatter(
-                    fimo_df, title="FIMO Enrichment: Primary vs Control",
-                    save_path=os.path.join(fimo_dir, "fimo_enrichment_scatter.png")
+                    fimo_df,
+                    title="FIMO Enrichment: Primary vs Control",
+                    save_path=os.path.join(fimo_dir, "fimo_enrichment_scatter.png"),
                 )
             except Exception as e:
                 logger.error(f"FIMO analysis failed: {e}")

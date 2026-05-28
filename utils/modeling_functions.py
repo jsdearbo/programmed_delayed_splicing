@@ -1,6 +1,7 @@
 """
 Model inference, attribution calculation, and TF-MoDISco wrappers.
 """
+
 import logging
 import numpy as np
 from typing import Any, List, Sequence
@@ -66,7 +67,7 @@ def get_attributions_for_element(
         seed=0,
         hypothetical=False,
         n_shuffles=10,
-        batch_size=kwargs.get('batch_size', 4),
+        batch_size=kwargs.get("batch_size", 4),
     )
     return attrs
 

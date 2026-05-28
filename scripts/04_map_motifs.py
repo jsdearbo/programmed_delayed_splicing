@@ -34,6 +34,7 @@ Outputs (written per subset+flank under experiment_dir)
     {subset}/masked_{flank}bp_flank/plots/modiscolite/<pattern_label>/<seq_name>.png
     {subset}/masked_{flank}bp_flank/plots/modiscolite/<pattern_label>_hits.csv
 """
+
 import os
 import sys
 import re
@@ -48,27 +49,33 @@ import pandas as pd
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.utility_functions import (
-    load_and_process_gtf, load_meme, select_longest_basic_transcripts
+    load_and_process_gtf,
+    load_meme,
+    select_longest_basic_transcripts,
 )
 from utils.sequence_functions import (
-    create_introns_dataframe, create_elements_dataframe, attribution_native_only
+    create_introns_dataframe,
+    create_elements_dataframe,
+    attribution_native_only,
 )
 from utils.helper_functions import handle_modiscolite
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 DEFAULTS = {
-    "model_seq_len":    524288,
-    "modisco_window":   1000,
-    "flank":            50,
-    "plot":             {"modes": ["combined", "separate"]},
-    "bigwig_dir":       None,
+    "model_seq_len": 524288,
+    "modisco_window": 1000,
+    "flank": 50,
+    "plot": {"modes": ["combined", "separate"]},
+    "bigwig_dir": None,
     "selection_method": "modiscolite",
-    "attr_respect_to":  "element_only",
+    "attr_respect_to": "element_only",
     "motifs_of_interest": None,
-    "motif_regex":      None,
-    "motif_limit":      None,
+    "motif_regex": None,
+    "motif_limit": None,
     "force_native_conversion": False,
 }
 MAPPING_SECTION = "motif_mapping"
@@ -97,16 +104,18 @@ def load_cfg(args) -> dict:
         return default
 
     cfg = {**DEFAULTS, **block}
-    cfg["experiment_dir"]          = pick("experiment_dir")
-    cfg["modisco_window"]          = pick("modisco_window", DEFAULTS["modisco_window"])
-    cfg["flank"]                   = pick("flank", DEFAULTS["flank"])
-    cfg["cosi_file_path"]          = pick("cosi_file_path")
-    cfg["gtf_file"]                = pick("gtf_file")
-    cfg["bigwig_dir"]              = pick("bigwig_dir", DEFAULTS["bigwig_dir"])
-    cfg["attr_respect_to"]         = pick("attr_respect_to", DEFAULTS["attr_respect_to"])
-    cfg["selection_method"]        = pick("selection_method", DEFAULTS["selection_method"])
-    cfg["plot"]                    = {**DEFAULTS["plot"], **(pick("plot", {}) or {})}
-    cfg["force_native_conversion"] = pick("force_native_conversion", DEFAULTS["force_native_conversion"])
+    cfg["experiment_dir"] = pick("experiment_dir")
+    cfg["modisco_window"] = pick("modisco_window", DEFAULTS["modisco_window"])
+    cfg["flank"] = pick("flank", DEFAULTS["flank"])
+    cfg["cosi_file_path"] = pick("cosi_file_path")
+    cfg["gtf_file"] = pick("gtf_file")
+    cfg["bigwig_dir"] = pick("bigwig_dir", DEFAULTS["bigwig_dir"])
+    cfg["attr_respect_to"] = pick("attr_respect_to", DEFAULTS["attr_respect_to"])
+    cfg["selection_method"] = pick("selection_method", DEFAULTS["selection_method"])
+    cfg["plot"] = {**DEFAULTS["plot"], **(pick("plot", {}) or {})}
+    cfg["force_native_conversion"] = pick(
+        "force_native_conversion", DEFAULTS["force_native_conversion"]
+    )
 
     # CLI overrides
     if args.experiment_dir:
@@ -132,6 +141,7 @@ def load_cfg(args) -> dict:
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _safe_load_pickle(path: str):
     with open(path, "rb") as f:
         return pickle.load(f)
@@ -141,8 +151,9 @@ def _tensor_window_start(seq_len: int, win: int) -> int:
     return (seq_len // 2) - (win // 2)
 
 
-def _prep_indexing_df(cosi_csv, seq_len, modisco_window,
-                       attr_respect_to="element_only", gtf_file=None):
+def _prep_indexing_df(
+    cosi_csv, seq_len, modisco_window, attr_respect_to="element_only", gtf_file=None
+):
     """
     Build the per-sequence indexing DataFrame used for coordinate mapping.
 
@@ -153,23 +164,28 @@ def _prep_indexing_df(cosi_csv, seq_len, modisco_window,
     df = pd.read_csv(cosi_csv)
     chrom_col = "chrom" if "chrom" in df.columns else "chr"
 
-    idx = pd.DataFrame({
-        "index":     df.index,
-        "unique_ID": (df["unique_ID"].astype(str) if "unique_ID" in df.columns
-                      else df["name"].astype(str)),
-        "chrom":     df[chrom_col].astype(str),
-        "start":     df["start"].astype(int),
-        "end":       df["end"].astype(int),
-        "strand":    df["strand"].astype(str),
-    })
+    idx = pd.DataFrame(
+        {
+            "index": df.index,
+            "unique_ID": (
+                df["unique_ID"].astype(str)
+                if "unique_ID" in df.columns
+                else df["name"].astype(str)
+            ),
+            "chrom": df[chrom_col].astype(str),
+            "start": df["start"].astype(int),
+            "end": df["end"].astype(int),
+            "strand": df["strand"].astype(str),
+        }
+    )
 
     if attr_respect_to == "whole_transcript":
         idx["element_start"] = idx["start"]
-        idx["element_end"]   = idx["end"]
+        idx["element_end"] = idx["end"]
 
         if "tscript_start" in df.columns and "tscript_end" in df.columns:
             idx["start"] = df["tscript_start"].astype(int)
-            idx["end"]   = df["tscript_end"].astype(int)
+            idx["end"] = df["tscript_end"].astype(int)
         else:
             if not gtf_file:
                 raise ValueError(
@@ -181,7 +197,9 @@ def _prep_indexing_df(cosi_csv, seq_len, modisco_window,
             gtf_df = load_and_process_gtf(gtf_file, gene_list)
             gtf_df = select_longest_basic_transcripts(gtf_df)
             tx_df = (
-                gtf_df.loc[gtf_df["feature"] == "transcript", ["gene_name", "start", "end"]]
+                gtf_df.loc[
+                    gtf_df["feature"] == "transcript", ["gene_name", "start", "end"]
+                ]
                 .sort_values(["gene_name", "start", "end"])
                 .drop_duplicates(subset=["gene_name"], keep="first")
                 .rename(columns={"start": "t_start", "end": "t_end"})
@@ -189,15 +207,17 @@ def _prep_indexing_df(cosi_csv, seq_len, modisco_window,
             idx = idx.merge(tx_df, on="gene_name", how="left")
             have_tx = idx["t_start"].notna() & idx["t_end"].notna()
             idx.loc[have_tx, "start"] = idx.loc[have_tx, "t_start"].astype(int)
-            idx.loc[have_tx, "end"]   = idx.loc[have_tx, "t_end"].astype(int)
+            idx.loc[have_tx, "end"] = idx.loc[have_tx, "t_end"].astype(int)
             n_missing = (~have_tx).sum()
             if n_missing:
-                logger.warning(f"{n_missing} rows missing transcript bounds in GTF; "
-                                f"using element bounds for those rows.")
+                logger.warning(
+                    f"{n_missing} rows missing transcript bounds in GTF; "
+                    f"using element bounds for those rows."
+                )
             idx = idx.drop(columns=["t_start", "t_end"])
 
     lengths = (idx["end"] - idx["start"]).astype(int)
-    idx["tensor_start"]        = (seq_len // 2) - (lengths // 2)
+    idx["tensor_start"] = (seq_len // 2) - (lengths // 2)
     idx["tensor_window_start"] = _tensor_window_start(seq_len, modisco_window)
     return idx
 
@@ -207,10 +227,12 @@ def _subset_elements_for_indexing(gtf_file, indexing_df):
     if "gene_name" in indexing_df.columns:
         gene_list = indexing_df["gene_name"].unique().tolist()
     else:
-        gene_list = list({n.rsplit("_", 1)[0] for n in indexing_df["unique_ID"].unique()})
-    gtf_df      = load_and_process_gtf(gtf_file, gene_list)
-    gtf_df      = select_longest_basic_transcripts(gtf_df)
-    introns_df  = create_introns_dataframe(gtf_df)
+        gene_list = list(
+            {n.rsplit("_", 1)[0] for n in indexing_df["unique_ID"].unique()}
+        )
+    gtf_df = load_and_process_gtf(gtf_file, gene_list)
+    gtf_df = select_longest_basic_transcripts(gtf_df)
+    introns_df = create_introns_dataframe(gtf_df)
     elements_df = create_elements_dataframe(introns_df, gtf_df)
     return elements_df
 
@@ -218,8 +240,11 @@ def _subset_elements_for_indexing(gtf_file, indexing_df):
 def _maybe_load_bigwigs(bw_dir):
     if not bw_dir or not os.path.isdir(bw_dir):
         return {}
-    bw = {fn[:-3]: os.path.join(bw_dir, fn)
-          for fn in os.listdir(bw_dir) if fn.endswith(".bw")}
+    bw = {
+        fn[:-3]: os.path.join(bw_dir, fn)
+        for fn in os.listdir(bw_dir)
+        if fn.endswith(".bw")
+    }
     return dict(sorted(bw.items()))
 
 
@@ -230,10 +255,10 @@ def _select_motifs(cfg, motifs):
         if allow:
             names = allow
     if cfg.get("motif_regex"):
-        rx    = re.compile(cfg["motif_regex"])
+        rx = re.compile(cfg["motif_regex"])
         names = [m for m in names if rx.search(m)]
     if cfg.get("motif_limit"):
-        names = sorted(names)[:int(cfg["motif_limit"])]
+        names = sorted(names)[: int(cfg["motif_limit"])]
     return names or list(motifs.keys())
 
 
@@ -253,7 +278,8 @@ def discover_modisco_subsets(cfg) -> list:
         raise SystemExit(f"Experiment dir not found: {exp_dir}")
 
     rbp_subsets = sorted(
-        d for d in entries
+        d
+        for d in entries
         if d.endswith("_seqs_modisco") and os.path.isdir(os.path.join(exp_dir, d))
     )
     if rbp_subsets:
@@ -264,7 +290,9 @@ def discover_modisco_subsets(cfg) -> list:
         logger.info("Detected intron mode (found experiment_dir/modisco).")
         return ["modisco"]
 
-    logger.warning("No RBP subsets or 'modisco' dir found; falling back to experiment root '.'")
+    logger.warning(
+        "No RBP subsets or 'modisco' dir found; falling back to experiment root '.'"
+    )
     return ["."]
 
 
@@ -277,9 +305,9 @@ def _resolve_modisco_and_meme(cfg, subset: str, flank: int):
       - RBP:    {EXP_DIR}/{subset}/masked_{flank}bp_flank/...
       - Legacy: {EXP_DIR}/masked_{flank}bp_flank/...  (subset == ".")
     """
-    exp_dir   = cfg["experiment_dir"]
+    exp_dir = cfg["experiment_dir"]
     flank_dir = f"masked_{flank}bp_flank"
-    base_dir  = exp_dir if subset == "." else os.path.join(exp_dir, subset)
+    base_dir = exp_dir if subset == "." else os.path.join(exp_dir, subset)
 
     candidates_h5 = [
         os.path.join(base_dir, flank_dir, "modisco_results.h5"),
@@ -303,21 +331,26 @@ def _resolve_modisco_and_meme(cfg, subset: str, flank: int):
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main():
     args = parse_args()
-    cfg  = load_cfg(args)
+    cfg = load_cfg(args)
     start_time = time.time()
 
-    flank_cfg    = cfg.get("flank", 50)
-    flank_values = [int(f) for f in flank_cfg] if isinstance(flank_cfg, list) else [int(flank_cfg)]
+    flank_cfg = cfg.get("flank", 50)
+    flank_values = (
+        [int(f) for f in flank_cfg] if isinstance(flank_cfg, list) else [int(flank_cfg)]
+    )
 
     bw_files = _maybe_load_bigwigs(cfg.get("bigwig_dir"))
     if bw_files:
         logger.info(f"Loaded {len(bw_files)} BigWig tracks")
 
     # Native-only attribution cache lives at experiment_dir level
-    native_attr_path = os.path.join(cfg["experiment_dir"], "native_only_attributions.pkl")
-    full_attr_path   = os.path.join(cfg["experiment_dir"], "attributions.pkl")
+    native_attr_path = os.path.join(
+        cfg["experiment_dir"], "native_only_attributions.pkl"
+    )
+    full_attr_path = os.path.join(cfg["experiment_dir"], "attributions.pkl")
 
     subsets = discover_modisco_subsets(cfg)
 
@@ -334,11 +367,15 @@ def main():
             modisco_h5, motif_file = _resolve_modisco_and_meme(cfg, subset, flank)
 
             if not modisco_h5 or not os.path.exists(modisco_h5):
-                logger.warning(f"[subset={subset}][flank={flank}] Could not find MoDISco H5. Skipping.")
+                logger.warning(
+                    f"[subset={subset}][flank={flank}] Could not find MoDISco H5. Skipping."
+                )
                 continue
 
             if not motif_file or not os.path.exists(motif_file):
-                logger.warning(f"[subset={subset}][flank={flank}] Could not find motif file. Skipping.")
+                logger.warning(
+                    f"[subset={subset}][flank={flank}] Could not find motif file. Skipping."
+                )
                 continue
 
             plot_root = os.path.join(os.path.dirname(modisco_h5), "plots")
@@ -348,9 +385,11 @@ def main():
             logger.info(f"[subset={subset}][flank={flank}] Motif file:  {motif_file}")
             logger.info(f"[subset={subset}][flank={flank}] Plot dir:    {plot_root}")
 
-            motifs             = load_meme(motif_file)
+            motifs = load_meme(motif_file)
             motifs_of_interest = _select_motifs(cfg, motifs)
-            logger.info(f"Loaded {len(motifs)} motifs; selected {len(motifs_of_interest)}")
+            logger.info(
+                f"Loaded {len(motifs)} motifs; selected {len(motifs_of_interest)}"
+            )
 
             # Indexing DataFrame (cached per plot_root)
             idx_df_path = os.path.join(plot_root, "indexing_df.csv")
@@ -362,7 +401,11 @@ def main():
                     seq_len=int(cfg["model_seq_len"]),
                     modisco_window=int(cfg["modisco_window"]),
                     attr_respect_to=cfg["attr_respect_to"],
-                    gtf_file=cfg["gtf_file"] if cfg["attr_respect_to"] == "whole_transcript" else None,
+                    gtf_file=(
+                        cfg["gtf_file"]
+                        if cfg["attr_respect_to"] == "whole_transcript"
+                        else None
+                    ),
                 )
                 idx_df.to_csv(idx_df_path, index=False)
 
@@ -375,8 +418,12 @@ def main():
                 elements_df.to_csv(elements_df_path, index=False)
 
             # Attributions — load cached native-only or convert and save
-            if os.path.exists(native_attr_path) and not cfg.get("force_native_conversion"):
-                logger.info(f"Loading cached native-only attributions from {native_attr_path}")
+            if os.path.exists(native_attr_path) and not cfg.get(
+                "force_native_conversion"
+            ):
+                logger.info(
+                    f"Loading cached native-only attributions from {native_attr_path}"
+                )
                 final_attributions = _safe_load_pickle(native_attr_path)
             elif os.path.exists(full_attr_path):
                 logger.info(f"Converting full attributions from {full_attr_path}")
@@ -385,7 +432,11 @@ def main():
                 # Search multiple candidate paths for input_seqs.pkl
                 seq_candidates = [
                     os.path.join(cfg["experiment_dir"], "input_seqs.pkl"),
-                    os.path.normpath(os.path.join(cfg["experiment_dir"], "..", "..", "input_seqs.pkl")),
+                    os.path.normpath(
+                        os.path.join(
+                            cfg["experiment_dir"], "..", "..", "input_seqs.pkl"
+                        )
+                    ),
                 ]
                 input_seqs = None
                 for p in seq_candidates:
@@ -393,12 +444,16 @@ def main():
                         input_seqs = _safe_load_pickle(p)
                         break
                 if input_seqs is None:
-                    raise FileNotFoundError("Could not find input_seqs.pkl for native conversion.")
+                    raise FileNotFoundError(
+                        "Could not find input_seqs.pkl for native conversion."
+                    )
 
-                final_attributions = np.array([
-                    attribution_native_only(pt_attributions[i], seq)
-                    for i, seq in enumerate(input_seqs)
-                ])
+                final_attributions = np.array(
+                    [
+                        attribution_native_only(pt_attributions[i], seq)
+                        for i, seq in enumerate(input_seqs)
+                    ]
+                )
                 with open(native_attr_path, "wb") as f:
                     pickle.dump(final_attributions, f)
                 logger.info(f"Saved native-only attributions to {native_attr_path}")
@@ -409,7 +464,9 @@ def main():
                     f"  full:   {full_attr_path}"
                 )
 
-            logger.info(f"[subset={subset}][flank={flank}] Attributions shape: {final_attributions.shape}")
+            logger.info(
+                f"[subset={subset}][flank={flank}] Attributions shape: {final_attributions.shape}"
+            )
 
             sel = str(cfg.get("selection_method", "modiscolite")).lower()
             logo_plot_dir = os.path.join(plot_root, sel)
@@ -436,7 +493,7 @@ def main():
                 )
 
     total_time = time.time() - start_time
-    days, rem  = divmod(total_time, 86400)
+    days, rem = divmod(total_time, 86400)
     hours, rem = divmod(rem, 3600)
     mins, secs = divmod(rem, 60)
     logger.info(f"Total runtime: {int(days)}d {int(hours)}h {int(mins)}m {secs:.2f}s")

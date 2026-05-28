@@ -6,6 +6,7 @@ Adapted from gReLU_fine_tuning/utils.py with hardcoded local paths removed.
 Chromosome lengths are resolved via genomepy's API rather than a fixed
 assembly_report.txt location.
 """
+
 import os
 import pickle
 import logging
@@ -47,9 +48,13 @@ def get_chromosome_lengths(genome: str, genome_fasta: str = None) -> pd.DataFram
                 usecols=[0, 1],
                 names=["chrom", "length"],
             )
-            logger.info(f"Loaded {len(df)} chromosome lengths for {genome} from {fai_path}")
+            logger.info(
+                f"Loaded {len(df)} chromosome lengths for {genome} from {fai_path}"
+            )
             return df
-        logger.warning(f"FASTA index not found at {fai_path}; continuing fallback chain")
+        logger.warning(
+            f"FASTA index not found at {fai_path}; continuing fallback chain"
+        )
 
     cache_dir = os.path.join(os.path.expanduser("~"), ".local", "share", "genomes")
     assembly_report_path = os.path.join(cache_dir, genome, "assembly_report.txt")
@@ -63,7 +68,9 @@ def get_chromosome_lengths(genome: str, genome_fasta: str = None) -> pd.DataFram
     assembly_report = pd.read_csv(assembly_report_path, sep="\t")
     df = assembly_report[["UCSC-style-name", "Sequence-Length"]].copy()
     df.columns = ["chrom", "length"]
-    logger.info(f"Loaded {len(df)} chromosome lengths for {genome} from assembly_report.txt")
+    logger.info(
+        f"Loaded {len(df)} chromosome lengths for {genome} from assembly_report.txt"
+    )
     return df
 
 
@@ -87,7 +94,7 @@ def generate_intervals(
     """
     intervals_list = []
     for _, row in chromosome_lengths.iterrows():
-        chrom  = row["chrom"]
+        chrom = row["chrom"]
         length = row["length"]
         stride = (sequence_length // 3 - 15) if tstride else sequence_length
         for start in range(0, length, stride):
@@ -131,9 +138,15 @@ def make_data_path(
             "Set fine_tuning.dataset_cache_dir in your config."
         )
     stride_status = "stride" if tstride else "no_stride"
-    shift_status  = f"shift_{shift}" if shift else "no_shift"
-    base_path     = os.path.join(dataset_cache_dir, blacklist, stride_status, shift_status, bw_name)
-    full_path     = os.path.join(base_path, trans_func) if trans_func else os.path.join(base_path, "no_scaling")
+    shift_status = f"shift_{shift}" if shift else "no_shift"
+    base_path = os.path.join(
+        dataset_cache_dir, blacklist, stride_status, shift_status, bw_name
+    )
+    full_path = (
+        os.path.join(base_path, trans_func)
+        if trans_func
+        else os.path.join(base_path, "no_scaling")
+    )
     return full_path
 
 

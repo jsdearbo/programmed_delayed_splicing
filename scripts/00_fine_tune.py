@@ -14,6 +14,7 @@ Outputs (written to fine_tuning.save_dir)
     epoch=N-step=M.ckpt   — PyTorch Lightning checkpoint(s)
     last.ckpt             — checkpoint from final epoch
 """
+
 import os
 import sys
 import logging
@@ -30,10 +31,16 @@ from grelu.data.dataset import BigWigSeqDataset
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.fine_tune_utils import (
-    get_chromosome_lengths, generate_intervals, load_datasets, save_datasets, make_data_path
+    get_chromosome_lengths,
+    generate_intervals,
+    load_datasets,
+    save_datasets,
+    make_data_path,
 )
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -103,7 +110,7 @@ def require_usable_cuda_if_requested(train_params: dict):
 
 def main():
     args = parse_args()
-    cfg  = load_config(args.config)
+    cfg = load_config(args.config)
 
     ft = cfg.get("fine_tuning", {})
     if not ft:
@@ -112,25 +119,28 @@ def main():
             "Add a fine_tuning: block — see config/example_config.yaml."
         )
 
-    genome       = ft["genome"]
-    species      = ft["species"]
+    genome = ft["genome"]
+    species = ft["species"]
     sequence_length = int(ft["sequence_length"])
-    bw_dir       = ft["bw_dir"]
-    bw_files     = ft["bw_files"]
-    lab_len      = int(ft["lab_len"])
-    bin_len      = int(ft["bin_len"])
+    bw_dir = ft["bw_dir"]
+    bw_files = ft["bw_files"]
+    lab_len = int(ft["lab_len"])
+    bin_len = int(ft["bin_len"])
     model_params = ft["model_params"]
     train_params = dict(ft.get("train_params") or {})
-    trans_func   = ft.get("trans_func")
-    tstride      = ft.get("tstride", False)
-    blacklist    = ft.get("blacklist", "grelu")
-    shift        = ft.get("shift", 0)
+    trans_func = ft.get("trans_func")
+    tstride = ft.get("tstride", False)
+    blacklist = ft.get("blacklist", "grelu")
+    shift = ft.get("shift", 0)
     genome_fasta = ft.get("genome_fasta", cfg.get("genome_fasta"))
-    project      = ft.get("project", "elife_delay_splice")
-    dataset_cache_dir = ft.get("dataset_cache_dir",
-                               os.path.join(ft.get("save_dir",
-                                            os.path.dirname(cfg.get("experiment_dir", "."))),
-                                            "datasets"))
+    project = ft.get("project", "elife_delay_splice")
+    dataset_cache_dir = ft.get(
+        "dataset_cache_dir",
+        os.path.join(
+            ft.get("save_dir", os.path.dirname(cfg.get("experiment_dir", "."))),
+            "datasets",
+        ),
+    )
 
     # Ensure lr is float (YAML may parse 1e-6 as string in some versions)
     if "lr" in train_params:
@@ -141,21 +151,27 @@ def main():
 
     input_bigwig = [os.path.join(bw_dir, f) for f in bw_files]
     bw_name_list = [os.path.basename(f).split(".")[0] for f in bw_files]
-    bw_name      = "__".join(bw_name_list)
+    bw_name = "__".join(bw_name_list)
 
     genome_for_dataset = genome
     if genome_fasta:
         if not os.path.exists(genome_fasta):
-            raise FileNotFoundError(f"Configured genome_fasta does not exist: {genome_fasta}")
+            raise FileNotFoundError(
+                f"Configured genome_fasta does not exist: {genome_fasta}"
+            )
         ensure_sizes_file_for_fasta(genome_fasta)
         genome_for_dataset = genome_fasta
-        logger.info(f"Using local FASTA for dataset genome checks: {genome_for_dataset}")
+        logger.info(
+            f"Using local FASTA for dataset genome checks: {genome_for_dataset}"
+        )
 
     for f_path, f_name in zip(input_bigwig, bw_name_list):
         logger.info(f"Task: {f_name}  →  {f_path}")
 
     chromosome_lengths = get_chromosome_lengths(genome, genome_fasta=genome_fasta)
-    intervals_df = generate_intervals(chromosome_lengths, sequence_length, tstride=tstride)
+    intervals_df = generate_intervals(
+        chromosome_lengths, sequence_length, tstride=tstride
+    )
 
     if blacklist == "grelu":
         intervals_df = grelu.data.preprocess.filter_blacklist(
@@ -172,8 +188,8 @@ def main():
         )
 
     train_chroms = "autosomes"
-    val_chroms   = ["chr10"]
-    test_chroms  = ["chr11"]
+    val_chroms = ["chr10"]
+    test_chroms = ["chr11"]
 
     intervals_train, intervals_val, intervals_test = grelu.data.preprocess.split(
         intervals_df,
@@ -187,14 +203,18 @@ def main():
     logger.info(f"Unique interval lengths in train: {unique_count}")
 
     transformed_data_path = make_data_path(
-        blacklist, tstride, shift, bw_name, trans_func,
-        dataset_cache_dir=dataset_cache_dir
+        blacklist,
+        tstride,
+        shift,
+        bw_name,
+        trans_func,
+        dataset_cache_dir=dataset_cache_dir,
     )
 
     dataset_files = {
         "train_dataset": os.path.join(transformed_data_path, "train_dataset.pkl"),
-        "val_dataset":   os.path.join(transformed_data_path, "val_dataset.pkl"),
-        "test_dataset":  os.path.join(transformed_data_path, "test_dataset.pkl"),
+        "val_dataset": os.path.join(transformed_data_path, "val_dataset.pkl"),
+        "test_dataset": os.path.join(transformed_data_path, "test_dataset.pkl"),
     }
 
     if all(os.path.exists(p) for p in dataset_files.values()):
@@ -203,29 +223,33 @@ def main():
     else:
         logger.info(f"Building datasets → {transformed_data_path}")
         dataset_params = {
-            "bw_files":            input_bigwig,
-            "seq_len":             sequence_length,
-            "genome":              genome_for_dataset,
-            "end":                 "both",
-            "rc":                  True,
-            "label_len":           lab_len,
-            "bin_size":            bin_len,
-            "seed":                42,
-            "augment_mode":        "random",
+            "bw_files": input_bigwig,
+            "seq_len": sequence_length,
+            "genome": genome_for_dataset,
+            "end": "both",
+            "rc": True,
+            "label_len": lab_len,
+            "bin_size": bin_len,
+            "seed": 42,
+            "augment_mode": "random",
             "label_transform_func": trans_func,
-            "max_seq_shift":       shift,
+            "max_seq_shift": shift,
         }
         datasets = {
-            "train_dataset": BigWigSeqDataset(intervals=intervals_train, **dataset_params),
-            "val_dataset":   BigWigSeqDataset(intervals=intervals_val,   **dataset_params),
-            "test_dataset":  BigWigSeqDataset(intervals=intervals_test,  **dataset_params),
+            "train_dataset": BigWigSeqDataset(
+                intervals=intervals_train, **dataset_params
+            ),
+            "val_dataset": BigWigSeqDataset(intervals=intervals_val, **dataset_params),
+            "test_dataset": BigWigSeqDataset(
+                intervals=intervals_test, **dataset_params
+            ),
         }
         save_datasets(datasets, dataset_files)
 
     data_params = {
         "train_dataset": datasets["train_dataset"],
-        "val_dataset":   datasets["val_dataset"],
-        "test_dataset":  datasets["test_dataset"],
+        "val_dataset": datasets["val_dataset"],
+        "test_dataset": datasets["test_dataset"],
     }
 
     model = grelu_wandb.load_model(
@@ -248,15 +272,15 @@ def main():
         config={
             "model_params": model_params,
             "train_params": train_params,
-            "data_params": {k: str(v) for k, v in data_params.items()
-                            if k != "test_dataset"},
+            "data_params": {
+                k: str(v) for k, v in data_params.items() if k != "test_dataset"
+            },
         },
     )
 
     model.tune_on_dataset(
         train_dataset=datasets["train_dataset"],
         val_dataset=datasets["val_dataset"],
-        # layers_to_freeze=model_params.get("layers_to_freeze"), # dead parameter-- freeze logic is only on private fork. not used in config or current codebase.
     )
 
     logger.info("Fine-tuning complete.")

@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 def load_config(config_path: str):
     """Load a config from a YAML file path."""
-    with open(config_path, 'r') as f:
+    with open(config_path, "r") as f:
         config = yaml.safe_load(f)
     return config
 
@@ -34,7 +34,9 @@ def validate_file(filepath: str, description: str):
         raise FileNotFoundError(f"{description} not found: {filepath}")
 
 
-def load_model(species: str, model_selection: str = None, checkpoint_path: str = None, device=None):
+def load_model(
+    species: str, model_selection: str = None, checkpoint_path: str = None, device=None
+):
     """
     Load a Borzoi model.
 
@@ -52,19 +54,23 @@ def load_model(species: str, model_selection: str = None, checkpoint_path: str =
     """
     try:
         if device is None:
-            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         else:
             device = torch.device(device)
 
-        if model_selection == 'fine_tuned':
+        if model_selection == "fine_tuned":
             if checkpoint_path is None:
-                raise ValueError("checkpoint_path must be provided for fine-tuned models.")
+                raise ValueError(
+                    "checkpoint_path must be provided for fine-tuned models."
+                )
             model = grelu.lightning.LightningModel.load_from_checkpoint(
                 checkpoint_path, map_location=device
             )
             logger.info(f"Fine-tuned model loaded from {checkpoint_path} on {device}")
         else:
-            model = grelu.resources.load_model(project="borzoi", model_name=f"{species}_rep0")
+            model = grelu.resources.load_model(
+                project="borzoi", model_name=f"{species}_rep0"
+            )
             logger.info(f"Pretrained Borzoi model for {species} loaded on {device}")
 
         return model.to(device), device
@@ -90,22 +96,31 @@ def load_gtf(file_path: str) -> pd.DataFrame:
     """Load a GTF file into a pandas DataFrame."""
     logger.info(f"Loading GTF file from {file_path}")
     column_names = [
-        "seqname", "source", "feature", "start", "end",
-        "score", "strand", "frame", "attribute"
+        "seqname",
+        "source",
+        "feature",
+        "start",
+        "end",
+        "score",
+        "strand",
+        "frame",
+        "attribute",
     ]
-    gtf_df = pd.read_csv(file_path, sep='\t', comment='#', names=column_names)
+    gtf_df = pd.read_csv(file_path, sep="\t", comment="#", names=column_names)
     return gtf_df
 
 
 def process_gtf(gtf_df: pd.DataFrame) -> pd.DataFrame:
     """Extract gene/transcript attributes from a GTF DataFrame."""
     logger.info("Processing GTF DataFrame")
-    gtf_df['gene_name'] = gtf_df['attribute'].str.extract(r'gene_name "(.*?)";')
-    gtf_df['transcript_name'] = gtf_df['attribute'].str.extract(r'transcript_name "(.*?)";')
-    gtf_df['exon_number'] = gtf_df['attribute'].str.extract(r'exon_number (\d+);')
-    gtf_df['transcript_id'] = gtf_df['attribute'].str.extract(r'transcript_id "(.*?)";')
-    gtf_df['tags'] = gtf_df['attribute'].str.findall(r'tag "([^"]+)"')
-    gtf_df = gtf_df.rename(columns={'seqname': 'chrom'})
+    gtf_df["gene_name"] = gtf_df["attribute"].str.extract(r'gene_name "(.*?)";')
+    gtf_df["transcript_name"] = gtf_df["attribute"].str.extract(
+        r'transcript_name "(.*?)";'
+    )
+    gtf_df["exon_number"] = gtf_df["attribute"].str.extract(r"exon_number (\d+);")
+    gtf_df["transcript_id"] = gtf_df["attribute"].str.extract(r'transcript_id "(.*?)";')
+    gtf_df["tags"] = gtf_df["attribute"].str.findall(r'tag "([^"]+)"')
+    gtf_df = gtf_df.rename(columns={"seqname": "chrom"})
     return gtf_df
 
 
@@ -115,8 +130,10 @@ def load_and_process_gtf(gtf_file: str, gene_list: list = None) -> pd.DataFrame:
     gtf_df = load_gtf(gtf_file)
     gtf_df = process_gtf(gtf_df)
     if gene_list is not None:
-        subset_gtf_df = gtf_df[gtf_df['gene_name'].isin(gene_list)]
-        logger.info(f"Subset GTF contains {len(subset_gtf_df)} rows for {len(gene_list)} genes.")
+        subset_gtf_df = gtf_df[gtf_df["gene_name"].isin(gene_list)]
+        logger.info(
+            f"Subset GTF contains {len(subset_gtf_df)} rows for {len(gene_list)} genes."
+        )
         return subset_gtf_df
     else:
         logger.info(f"Returning all {len(gtf_df)} rows (no gene_list supplied).")
@@ -125,16 +142,22 @@ def load_and_process_gtf(gtf_file: str, gene_list: list = None) -> pd.DataFrame:
 
 def select_longest_basic_transcripts(gtf_df: pd.DataFrame) -> pd.DataFrame:
     """Select the longest 'basic' tag transcript per gene."""
-    exons = gtf_df[gtf_df['feature'] == 'exon'].copy()
-    exons = exons[exons['tags'].apply(
-        lambda tags: 'basic' in tags if isinstance(tags, list) else False
-    )]
-    exons['length'] = exons['end'] - exons['start']
-    transcript_lengths = exons.groupby('transcript_id')['length'].sum()
-    transcript_to_gene = exons.drop_duplicates('transcript_id')[['transcript_id', 'gene_name']]
-    merged = transcript_lengths.reset_index().merge(transcript_to_gene, on='transcript_id')
-    longest = merged.sort_values('length', ascending=False).drop_duplicates('gene_name')
-    selected_gtf = gtf_df[gtf_df['transcript_id'].isin(longest['transcript_id'])]
+    exons = gtf_df[gtf_df["feature"] == "exon"].copy()
+    exons = exons[
+        exons["tags"].apply(
+            lambda tags: "basic" in tags if isinstance(tags, list) else False
+        )
+    ]
+    exons["length"] = exons["end"] - exons["start"]
+    transcript_lengths = exons.groupby("transcript_id")["length"].sum()
+    transcript_to_gene = exons.drop_duplicates("transcript_id")[
+        ["transcript_id", "gene_name"]
+    ]
+    merged = transcript_lengths.reset_index().merge(
+        transcript_to_gene, on="transcript_id"
+    )
+    longest = merged.sort_values("length", ascending=False).drop_duplicates("gene_name")
+    selected_gtf = gtf_df[gtf_df["transcript_id"].isin(longest["transcript_id"])]
     return selected_gtf
 
 
@@ -169,4 +192,4 @@ def load_meme(meme_file: str) -> dict:
 
 def load_tasks(model) -> pd.DataFrame:
     """Load task metadata from a model's data_params."""
-    return pd.DataFrame(model.data_params['tasks'])
+    return pd.DataFrame(model.data_params["tasks"])

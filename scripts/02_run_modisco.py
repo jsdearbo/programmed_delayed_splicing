@@ -16,6 +16,7 @@ Outputs (written under experiment_dir/<subset>/<masked_Xbp_flank>/)
     forward.meme          — de-novo motifs (forward strand)
     combined.meme         — forward + reverse-complement motifs
 """
+
 import os
 import sys
 import pickle
@@ -29,13 +30,17 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.sequence_functions import attribution_native_only, mask_attributions
 from utils.utility_functions import (
-    setup_experiment_directory, validate_file, load_model, load_saved_attributions
+    setup_experiment_directory,
+    validate_file,
+    load_model,
+    load_saved_attributions,
 )
 from utils.modeling_functions import run_modisco_analysis
 from utils.enrichment_functions import convert_modisco_h5_to_meme
 
-logging.basicConfig(level=logging.INFO,
-                    format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -52,17 +57,17 @@ def load_config(config_path: str) -> dict:
 
 def main():
     args = parse_args()
-    cfg  = load_config(args.config)
+    cfg = load_config(args.config)
 
-    experiment_dir  = cfg["experiment_dir"]
+    experiment_dir = cfg["experiment_dir"]
     coord_file_path = cfg["coord_file_path"]
-    species         = cfg.get("species", "human")
+    species = cfg.get("species", "human")
     model_selection = cfg.get("model_selection", "pretrained")
     checkpoint_path = cfg.get("checkpoint_path")
-    mask_mode       = cfg.get("mask_mode", "element_only")
-    flanks          = cfg.get("flank", [500, 50])
-    modisco_len     = cfg.get("modisco_len", 100)
-    groupby_col     = cfg.get("groupby_column")  # e.g. 'expression' → splits up/down/all
+    mask_mode = cfg.get("mask_mode", "element_only")
+    flanks = cfg.get("flank", [500, 50])
+    modisco_len = cfg.get("modisco_len", 100)
+    groupby_col = cfg.get("groupby_column")  # e.g. 'expression' → splits up/down/all
 
     if isinstance(flanks, int):
         flanks = [flanks]
@@ -106,23 +111,30 @@ def main():
 
         # Map subset rows → attribution indices via an inner join to discard failed sequences
         subset_mapping = pd.merge(
-            subset_coord_full, mapping_df,
-            left_index=True, right_on="coord_index", how="inner"
+            subset_coord_full,
+            mapping_df,
+            left_index=True,
+            right_on="coord_index",
+            how="inner",
         )
-        subset_indices      = subset_mapping["attribution_index"].astype(int).values
+        subset_indices = subset_mapping["attribution_index"].astype(int).values
         subset_attributions = final_attributions[subset_indices]
-        subset_input_seqs   = [input_seqs[i] for i in subset_indices]
-        
+        subset_input_seqs = [input_seqs[i] for i in subset_indices]
+
         # Override subset_coord with intersected rows so mask_attributions gets matching lengths
         subset_coord = subset_mapping.reset_index(drop=True)
 
         if len(subset_input_seqs) == 0:
-            logger.warning(f"Subset '{subset_name}' has 0 valid sequences. Skipping to avoid length assertion errors.")
+            logger.warning(
+                f"Subset '{subset_name}' has 0 valid sequences. Skipping to avoid length assertion errors."
+            )
             continue
 
         for flank in flanks:
             logger.info(f"Running MoDISco: {subset_name} | flank={flank}")
-            out_dir = os.path.join(experiment_dir, subset_name, f"masked_{flank}bp_flank")
+            out_dir = os.path.join(
+                experiment_dir, subset_name, f"masked_{flank}bp_flank"
+            )
             os.makedirs(out_dir, exist_ok=True)
 
             masked_attrs = mask_attributions(
@@ -156,4 +168,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

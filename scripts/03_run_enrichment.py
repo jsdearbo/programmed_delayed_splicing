@@ -17,6 +17,7 @@ Outputs (written under experiment_dir/enrichment/<primary>_vs_<control>/)
     fimo/fimo_enrichment.csv — FIMO per-motif hit percentages
     */sea_enrichment_scatter.png, */fimo_enrichment_scatter.png
 """
+
 import os
 import re
 import sys
@@ -31,12 +32,15 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.utility_functions import setup_experiment_directory, validate_file
 from utils.enrichment_functions import (
-    run_enrichment_analysis, write_fasta, check_dependencies
+    run_enrichment_analysis,
+    write_fasta,
+    check_dependencies,
 )
 from utils.sequence_functions import remove_fasta_overlaps
 
-logging.basicConfig(level=logging.INFO,
-                    format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -57,7 +61,7 @@ def crop_sequence(seq: str, element_len: int, flank: int) -> str:
     mid = total_len // 2
     half_len = element_len // 2
     start = max(0, mid - half_len - flank)
-    end   = min(total_len, mid + (element_len - half_len) + flank)
+    end = min(total_len, mid + (element_len - half_len) + flank)
     return seq[start:end]
 
 
@@ -68,26 +72,33 @@ def get_subset_sequences(subset_mask, input_seqs, mapping_df, coord_data, flank=
     each side (matching the window used by MoDISco). Without cropping, long
     sequences cause FIMO to find chance hits in nearly every entry.
     """
-    valid_indices  = np.where(subset_mask)[0]
+    valid_indices = np.where(subset_mask)[0]
     subset_mapping = mapping_df[mapping_df["coord_index"].isin(valid_indices)].copy()
     subset_mapping = subset_mapping.dropna(subset=["coord_index", "attribution_index"])
-    subset_mapping["coord_index"]      = subset_mapping["coord_index"].astype(int)
-    subset_mapping["attribution_index"] = subset_mapping["attribution_index"].astype(int)
-    subset_mapping = subset_mapping.drop_duplicates(subset=["attribution_index"], keep="first")
+    subset_mapping["coord_index"] = subset_mapping["coord_index"].astype(int)
+    subset_mapping["attribution_index"] = subset_mapping["attribution_index"].astype(
+        int
+    )
+    subset_mapping = subset_mapping.drop_duplicates(
+        subset=["attribution_index"], keep="first"
+    )
 
-    attr_indices  = subset_mapping["attribution_index"].values
-    attr_to_coord = dict(zip(subset_mapping["attribution_index"],
-                             subset_mapping["coord_index"]))
-    names = (subset_mapping["name"].astype(str).tolist()
-             if "name" in subset_mapping.columns
-             else [f"seq_{i}" for i in attr_indices])
+    attr_indices = subset_mapping["attribution_index"].values
+    attr_to_coord = dict(
+        zip(subset_mapping["attribution_index"], subset_mapping["coord_index"])
+    )
+    names = (
+        subset_mapping["name"].astype(str).tolist()
+        if "name" in subset_mapping.columns
+        else [f"seq_{i}" for i in attr_indices]
+    )
 
     seqs = []
     for attr_idx in attr_indices:
         seq = input_seqs[attr_idx]
         if flank is not None:
-            coord_idx  = attr_to_coord[attr_idx]
-            row        = coord_data.iloc[coord_idx]
+            coord_idx = attr_to_coord[attr_idx]
+            row = coord_data.iloc[coord_idx]
             element_len = int(abs(row["end"] - row["start"]))
             seq = crop_sequence(seq, element_len, flank)
         seqs.append(seq)
@@ -97,19 +108,19 @@ def get_subset_sequences(subset_mask, input_seqs, mapping_df, coord_data, flank=
 
 def main():
     args = parse_args()
-    cfg  = load_config(args.config)
+    cfg = load_config(args.config)
 
-    experiment_dir  = cfg["experiment_dir"]
+    experiment_dir = cfg["experiment_dir"]
     coord_file_path = cfg["coord_file_path"]
-    groupby_col     = cfg.get("groupby_column")
+    groupby_col = cfg.get("groupby_column")
 
     # Which MoDISco run to take motifs from
-    enrich_cfg   = cfg.get("enrichment", {})
+    enrich_cfg = cfg.get("enrichment", {})
     source_subset = enrich_cfg.get("source_subset", "all_seqs_modisco")
-    source_flank  = enrich_cfg.get("source_flank", "masked_50bp_flank")
-    comparisons   = enrich_cfg.get("comparisons", [])
-    run_sea         = enrich_cfg.get("run_sea", True)
-    run_fimo        = enrich_cfg.get("run_fimo", True)
+    source_flank = enrich_cfg.get("source_flank", "masked_50bp_flank")
+    comparisons = enrich_cfg.get("comparisons", [])
+    run_sea = enrich_cfg.get("run_sea", True)
+    run_fimo = enrich_cfg.get("run_fimo", True)
     dedupe_overlaps = cfg.get("dedupe_overlaps", True)
 
     # Derive FIMO crop flank from source_flank name (e.g. "masked_50bp_flank" → 50)
@@ -118,14 +129,18 @@ def main():
     if fimo_flank is not None:
         logger.info(f"FIMO sequences will be cropped to element + {fimo_flank}bp flank")
     else:
-        logger.warning("Could not parse flank from source_flank; passing full sequences to FIMO")
+        logger.warning(
+            "Could not parse flank from source_flank; passing full sequences to FIMO"
+        )
 
     check_dependencies()
     validate_file(coord_file_path, "Coordinate file")
     setup_experiment_directory(experiment_dir)
 
     # Locate motif file
-    motif_file = os.path.join(experiment_dir, source_subset, source_flank, "forward.meme")
+    motif_file = os.path.join(
+        experiment_dir, source_subset, source_flank, "forward.meme"
+    )
     if not os.path.exists(motif_file):
         alt = os.path.join(experiment_dir, source_subset, source_flank, "meme.txt")
         if os.path.exists(alt):
@@ -140,8 +155,8 @@ def main():
     # Load data produced by step 1
     with open(os.path.join(experiment_dir, "input_seqs.pkl"), "rb") as f:
         input_seqs = pickle.load(f)
-    mapping_df  = pd.read_csv(os.path.join(experiment_dir, "attribution_mapping.csv"))
-    coord_data  = pd.read_csv(coord_file_path)
+    mapping_df = pd.read_csv(os.path.join(experiment_dir, "attribution_mapping.csv"))
+    coord_data = pd.read_csv(coord_file_path)
     logger.info(f"Loaded {len(coord_data)} coordinate rows")
 
     # Build subset masks (must match logic from 02_run_modisco.py)
@@ -153,13 +168,14 @@ def main():
     subset_masks["all_seqs"] = np.ones(len(coord_data), dtype=bool)
 
     # Generate FASTA files for every subset
-    fasta_dir   = os.path.join(experiment_dir, "fasta_files")
+    fasta_dir = os.path.join(experiment_dir, "fasta_files")
     os.makedirs(fasta_dir, exist_ok=True)
     fasta_paths = {}
     for name, mask in subset_masks.items():
-        seqs, names = get_subset_sequences(mask, input_seqs, mapping_df, coord_data,
-                                           flank=fimo_flank)
-        out_path    = os.path.join(fasta_dir, f"{name}.fa")
+        seqs, names = get_subset_sequences(
+            mask, input_seqs, mapping_df, coord_data, flank=fimo_flank
+        )
+        out_path = os.path.join(fasta_dir, f"{name}.fa")
         write_fasta(seqs, names, out_path)
         fasta_paths[name] = out_path
         logger.info(f"FASTA written for '{name}': {len(seqs)} sequences → {out_path}")
@@ -179,7 +195,9 @@ def main():
         if not ctrl_stem.endswith("_seqs"):
             ctrl_stem = ctrl_stem + "_seqs"
         fasta_paths[ctrl_stem] = prebuilt_ctrl
-        logger.info(f"Registered pre-built control FASTA '{ctrl_stem}' → {prebuilt_ctrl}")
+        logger.info(
+            f"Registered pre-built control FASTA '{ctrl_stem}' → {prebuilt_ctrl}"
+        )
 
     # Run comparisons
     if not comparisons:
@@ -233,4 +251,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
