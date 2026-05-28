@@ -3,12 +3,13 @@
 # star alignment script adapted for single end reads here.
 
 # Set the paths to STAR and the reference genome
-STAR=/usr/bin/STAR
+# Override by setting STAR_PATH in your environment: export STAR_PATH=/path/to/STAR
+STAR="${STAR_PATH:-$(which STAR 2>/dev/null || echo /usr/bin/STAR)}"
 MAX_LOAD=16.0  # Maximum system load allowed to start the script
 
 # Check if STAR exists
 if [ ! -x "$STAR" ]; then
-  echo "Error: STAR executable not found at $STAR. Please check the path."
+  echo "Error: STAR executable not found at $STAR. Set STAR_PATH=/path/to/STAR or add STAR to your PATH."
   exit 1
 fi
 
@@ -56,11 +57,11 @@ current_load=$(get_current_load)
 
 # bump this up to 16 or 24 if you have a high-load system
 if (( $(echo "$current_load < $MAX_LOAD" | bc -l) )); then
-  echo "System load ($current_load) is under the threshold ($MAX_LOAD). Proceeding with 8 threads..."
+  echo "System load ($current_load) is under the threshold ($MAX_LOAD). Proceeding with 8 threads."
   threadcount=8
 else
-  echo "System load ($current_load) is above the threshold ($MAX_LOAD). Proceeding with 8 threads..."
-  threadcount=8
+  echo "WARNING: System load ($current_load) exceeds MAX_LOAD=$MAX_LOAD. Proceeding with reduced threads."
+  threadcount=4
 fi
 
 # --- Paired-end-aware loop --------------------------------------------------
