@@ -59,9 +59,8 @@ def load_model(species: str, model_selection: str = None, checkpoint_path: str =
         if model_selection == 'fine_tuned':
             if checkpoint_path is None:
                 raise ValueError("checkpoint_path must be provided for fine-tuned models.")
-            model = grelu.lightning.LightningModel.load_from_checkpoint(
-                checkpoint_path, map_location=device
-            )
+            from lora_patch import load_finetuned_checkpoint
+            model = load_finetuned_checkpoint(checkpoint_path)
             logger.info(f"Fine-tuned model loaded from {checkpoint_path} on {device}")
         else:
             model = grelu.resources.load_model(project="borzoi", model_name=f"{species}_rep0")
