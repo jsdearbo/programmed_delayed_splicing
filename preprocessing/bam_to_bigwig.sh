@@ -36,7 +36,7 @@ BAM_PATTERN="${BAM_PATTERN:-*.bam}"
 
 _parent_dir="$(dirname "$BAM_INPUT_DIR")"
 _norm_label="$(echo "${NORMALIZE:-None}" | tr '[:upper:]' '[:lower:]')"
-if [[ "$_norm_label" == "none" || "$_norm_label" == "none" ]]; then
+if [[ "$_norm_label" == "none" || "$_norm_label" == "no_norm" ]]; then
   _norm_label="no_norm"
 fi
 
