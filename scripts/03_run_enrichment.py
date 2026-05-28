@@ -191,7 +191,28 @@ def main():
 
     for comp in comparisons:
         prim_label = f"{comp['primary']}_seqs"
-        ctrl_label = f"{comp['control']}_seqs"
+        raw_ctrl   = comp["control"]
+
+        if raw_ctrl == "rest":
+            # Merge all subsets except the primary (and "all_seqs") into one control
+            ctrl_label = f"not_{comp['primary']}_seqs"
+            if ctrl_label not in fasta_paths:
+                other_labels = sorted(
+                    k for k in fasta_paths
+                    if k != prim_label and k != "all_seqs"
+                )
+                merged_path = os.path.join(fasta_dir, f"{ctrl_label}.fa")
+                with open(merged_path, "w") as out_f:
+                    for lbl in other_labels:
+                        with open(fasta_paths[lbl]) as in_f:
+                            out_f.write(in_f.read())
+                fasta_paths[ctrl_label] = merged_path
+                logger.info(
+                    f"Built merged control '{ctrl_label}' from: {other_labels}"
+                )
+        else:
+            ctrl_label = f"{raw_ctrl}_seqs"
+
         if prim_label not in fasta_paths or ctrl_label not in fasta_paths:
             logger.warning(
                 f"Skipping {prim_label} vs {ctrl_label}: subset FASTA not found."
