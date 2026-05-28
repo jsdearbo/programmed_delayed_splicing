@@ -163,6 +163,10 @@ def _prep_indexing_df(cosi_csv, seq_len, modisco_window,
         "strand":    df["strand"].astype(str),
     })
 
+    # Populate gene_name for GTF lookup — prefer explicit gene_symbol column
+    if "gene_symbol" in df.columns:
+        idx["gene_name"] = df["gene_symbol"].astype(str)
+
     if attr_respect_to == "whole_transcript":
         idx["element_start"] = idx["start"]
         idx["element_end"]   = idx["end"]
@@ -208,7 +212,13 @@ def _subset_elements_for_indexing(gtf_file, indexing_df):
         gene_list = indexing_df["gene_name"].unique().tolist()
     else:
         gene_list = list({n.rsplit("_", 1)[0] for n in indexing_df["unique_ID"].unique()})
-    gtf_df      = load_and_process_gtf(gtf_file, gene_list)
+    gtf_df = load_and_process_gtf(gtf_file, gene_list)
+    if gtf_df.empty:
+        logger.warning(
+            f"No matching genes found in GTF for {len(gene_list)} queried names; "
+            "gene structure panel will be empty."
+        )
+        return pd.DataFrame()
     gtf_df      = select_longest_basic_transcripts(gtf_df)
     introns_df  = create_introns_dataframe(gtf_df)
     elements_df = create_elements_dataframe(introns_df, gtf_df)
