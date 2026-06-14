@@ -293,8 +293,15 @@ def create_introns_dataframe(gtf_df: pd.DataFrame) -> pd.DataFrame:
     if not intron_dfs:
         return pd.DataFrame(
             columns=[
-                "chrom", "start", "end", "gene_name", "transcript_name",
-                "transcript_id", "strand", "intron_number", "intron_length",
+                "chrom",
+                "start",
+                "end",
+                "gene_name",
+                "transcript_name",
+                "transcript_id",
+                "strand",
+                "intron_number",
+                "intron_length",
             ]
         )
     return pd.concat(intron_dfs, ignore_index=True)
@@ -369,8 +376,17 @@ def create_elements_dataframe(
     if not elements_dfs:
         return pd.DataFrame(
             columns=[
-                "chrom", "start", "end", "strand", "element", "element_number",
-                "length", "gene_name", "transcript_id", "transcript_name", "element_type",
+                "chrom",
+                "start",
+                "end",
+                "strand",
+                "element",
+                "element_number",
+                "length",
+                "gene_name",
+                "transcript_id",
+                "transcript_name",
+                "element_type",
             ]
         )
     elements_df = pd.concat(elements_dfs, ignore_index=True)

@@ -52,15 +52,15 @@ def parse_args():
         choices=["all", "pos", "neg"],
         default="all",
         help="Restrict motifs to pos_pattern_* or neg_pattern_* entries only. "
-             "Outputs go to enrichment_pos_only/ or enrichment_neg_only/ "
-             "instead of enrichment/ (default: all).",
+        "Outputs go to enrichment_pos_only/ or enrichment_neg_only/ "
+        "instead of enrichment/ (default: all).",
     )
     p.add_argument(
         "--source-subset",
         default=None,
         help="Override enrichment.source_subset from config "
-             "(e.g. high_psi_seqs_modisco). Determines which per-bin MoDISco "
-             "motif file is used as FIMO input.",
+        "(e.g. high_psi_seqs_modisco). Determines which per-bin MoDISco "
+        "motif file is used as FIMO input.",
     )
     p.add_argument(
         "--only-comparison",
@@ -68,7 +68,7 @@ def parse_args():
         metavar=("PRIMARY", "CONTROL"),
         default=None,
         help="Run only this one comparison, e.g. --only-comparison high_psi low_psi. "
-             "Use 'rest' as CONTROL to mean the complement of the primary bin.",
+        "Use 'rest' as CONTROL to mean the complement of the primary bin.",
     )
     return p.parse_args()
 
@@ -313,7 +313,9 @@ def main():
                 ctrl_fasta = fasta_paths[ctrl_label]
 
         enrich_root = (
-            f"enrichment_{pattern_filter}_only" if pattern_filter != "all" else "enrichment"
+            f"enrichment_{pattern_filter}_only"
+            if pattern_filter != "all"
+            else "enrichment"
         )
         comp_dir = os.path.join(
             experiment_dir, enrich_root, source_subset, f"{prim_label}_vs_{ctrl_label}"

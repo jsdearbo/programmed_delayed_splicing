@@ -751,7 +751,9 @@ def plot_motif_scatter(
     ax.plot([0, 100], [0, 100], "k--", lw=1.5, label="y = x", zorder=1)
     # ax.plot([0, 22], [0, 22], 'k--', lw=1.5, label='y = x', zorder=1)
 
-    log2fc = np.log2((df["percent_match_primary"] + 0.5) / (df["percent_match_ctrl"] + 0.5))
+    log2fc = np.log2(
+        (df["percent_match_primary"] + 0.5) / (df["percent_match_ctrl"] + 0.5)
+    )
     top = df.loc[log2fc.abs().nlargest(topN).index].copy()
     top["_lfc"] = log2fc.reindex(top.index)
 
@@ -1310,19 +1312,20 @@ def plot_logo_gene_map_and_read_densities(
     # Layout — cap figsize to prevent genomic coordinate blowup
     fig_w = min(float(figsize[0]), 40.0)
     fig_h = min(float(figsize[1]), 20.0)
-    logger.info("[LAYOUT] figsize_in=%s n_tracks=%d → fig_w=%.2f fig_h=%.2f",
-                figsize, n_tracks, fig_w, fig_h)
+    logger.info(
+        "[LAYOUT] figsize_in=%s n_tracks=%d → fig_w=%.2f fig_h=%.2f",
+        figsize,
+        n_tracks,
+        fig_w,
+        fig_h,
+    )
     if n_tracks == 0:
-        fig = plt.figure(
-            figsize=(fig_w, max(fig_h, 6.0)), constrained_layout=True
-        )
+        fig = plt.figure(figsize=(fig_w, max(fig_h, 6.0)), constrained_layout=True)
         gs = fig.add_gridspec(2, 1, height_ratios=[4, 1])
         offset = 2
     else:
         height_ratios = [2, 0.5] + ([1] * n_tracks)
-        fig = plt.figure(
-            figsize=(fig_w, fig_h + 2 * n_tracks), constrained_layout=True
-        )
+        fig = plt.figure(figsize=(fig_w, fig_h + 2 * n_tracks), constrained_layout=True)
         gs = fig.add_gridspec(len(height_ratios), 1, height_ratios=height_ratios)
         offset = len(height_ratios) - n_tracks
 

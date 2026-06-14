@@ -70,6 +70,7 @@ def load_model(
             # and WandB / custom-loss hparams cause crashes before weights load.
             # load_finetuned_checkpoint handles all of this correctly.
             from lora_patch import load_finetuned_checkpoint
+
             model = load_finetuned_checkpoint(checkpoint_path)
             model = model.to(device)
             logger.info(f"Fine-tuned model loaded from {checkpoint_path} on {device}")
@@ -164,7 +165,9 @@ def select_longest_basic_transcripts(gtf_df: pd.DataFrame) -> pd.DataFrame:
             ["transcript_id", "gene_name"]
         ]
         merged = tx_lengths.reset_index().merge(tx_to_gene, on="transcript_id")
-        longest = merged.sort_values("length", ascending=False).drop_duplicates("gene_name")
+        longest = merged.sort_values("length", ascending=False).drop_duplicates(
+            "gene_name"
+        )
         return gtf_df[gtf_df["transcript_id"].isin(longest["transcript_id"])]
 
     exons = gtf_df[gtf_df["feature"] == "exon"].copy()
