@@ -170,6 +170,20 @@ def prepare_inputs(
         input_intervals = make_input_interval(chrom, start, end, seq_len, strand)
         eval_intervals = make_eval_interval(row, attr_respect_to)
         sequence = fetch_sequence(input_intervals, species, genome_version=genome_name)
+        if len(sequence) != seq_len:
+            actual_len = len(sequence)
+            pad = seq_len - actual_len
+            input_start_val = int(input_intervals["start"].iloc[0])
+            if input_start_val < 0:
+                sequence = "N" * pad + sequence
+                side = "left"
+            else:
+                sequence = sequence + "N" * pad
+                side = "right"
+            logger.warning(
+                f"{name}: fetched {actual_len} bp (expected {seq_len}); "
+                f"padded {pad} N's on {side} (chromosome boundary)"
+            )
         inputs.append(
             AttributionInput(sequence, input_intervals, eval_intervals, name, meta=row)
         )
@@ -276,6 +290,13 @@ def create_introns_dataframe(gtf_df: pd.DataFrame) -> pd.DataFrame:
                 }
             )
         )
+    if not intron_dfs:
+        return pd.DataFrame(
+            columns=[
+                "chrom", "start", "end", "gene_name", "transcript_name",
+                "transcript_id", "strand", "intron_number", "intron_length",
+            ]
+        )
     return pd.concat(intron_dfs, ignore_index=True)
 
 
@@ -345,6 +366,13 @@ def create_elements_dataframe(
         combined["length"] = combined["end"] - combined["start"] + 1
         elements_dfs.append(combined)
 
+    if not elements_dfs:
+        return pd.DataFrame(
+            columns=[
+                "chrom", "start", "end", "strand", "element", "element_number",
+                "length", "gene_name", "transcript_id", "transcript_name", "element_type",
+            ]
+        )
     elements_df = pd.concat(elements_dfs, ignore_index=True)
     return elements_df[
         [

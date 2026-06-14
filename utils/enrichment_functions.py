@@ -330,15 +330,18 @@ def plot_motif_scatter(
     label_col: str = "motif_name",
     title: str = "Motif Enrichment",
     save_path: Optional[str] = None,
-    top_n: int = 10,
+    top_n: int = 5,
 ):
     """Scatter plot of primary vs control motif-hit percentages."""
+    import math
+
     if df.empty:
         logger.warning("Empty DataFrame — nothing to plot.")
         return
     df = df.copy()
-    df["log2fc"] = np.log2((df[y_col] + 0.1) / (df[x_col] + 0.1))
-    plt.figure(figsize=(8, 8))
+    df["log2fc"] = np.log2((df[y_col] + 0.5) / (df[x_col] + 0.5))
+
+    fig, ax = plt.subplots(figsize=(8, 8))
     sns.set_style("whitegrid")
     sns.scatterplot(
         data=df,
@@ -349,28 +352,43 @@ def plot_motif_scatter(
         edgecolor="k",
         s=100,
         alpha=0.8,
+        ax=ax,
     )
     max_val = max(df[x_col].max(), df[y_col].max())
-    plt.plot([0, max_val], [0, max_val], ls="--", c=".3")
-    texts = []
-    df_sorted = df.sort_values("log2fc", ascending=False)
-    for i in range(min(top_n, len(df))):
-        row = df_sorted.iloc[i]
-        if row["log2fc"] > 0.5:
-            texts.append(plt.text(row[x_col], row[y_col], row[label_col], fontsize=9))
-    for i in range(min(top_n, len(df))):
-        row = df_sorted.iloc[-(i + 1)]
-        if row["log2fc"] < -0.5:
-            texts.append(plt.text(row[x_col], row[y_col], row[label_col], fontsize=9))
-    try:
-        from adjustText import adjust_text
+    ax.plot([0, max_val], [0, max_val], ls="--", c=".3")
+    ax.set_xlim(-2, max_val + 4)
+    ax.set_ylim(-2, max_val + 4)
+    ax.set_title(title)
+    ax.set_xlabel("% Sequences with Motif (Control)")
+    ax.set_ylabel("% Sequences with Motif (Primary)")
 
-        adjust_text(texts, arrowprops=dict(arrowstyle="-", color="gray", lw=0.5))
-    except ImportError:
-        pass
-    plt.title(title)
-    plt.xlabel("% Sequences with Motif (Control)")
-    plt.ylabel("% Sequences with Motif (Primary)")
+    # Always annotate the top_n points by |log2fc| with no threshold gate.
+    # Offsets are computed deterministically: labels fan out perpendicular to
+    # the diagonal so they are always visible regardless of log2fc magnitude.
+    top = df.loc[df["log2fc"].abs().nlargest(top_n).index]
+    offset = max_val * 0.18
+    n = len(top)
+    top_sorted = top.sort_values("log2fc", key=abs, ascending=False)
+
+    for rank, (_, row) in enumerate(top_sorted.iterrows()):
+        xp, yp = row[x_col], row[y_col]
+        base_deg = 135 if row["log2fc"] >= 0 else -45
+        deg = base_deg + (rank - n // 2) * 25
+        rad = math.radians(deg)
+        xt = float(np.clip(xp + offset * math.cos(rad), 1, max_val + 2))
+        yt = float(np.clip(yp + offset * math.sin(rad), 1, max_val + 2))
+        ax.annotate(
+            row[label_col],
+            xy=(xp, yp),
+            xytext=(xt, yt),
+            fontsize=9,
+            fontweight="bold",
+            color="black",
+            arrowprops=dict(arrowstyle="-", color="gray", lw=0.8, alpha=0.7),
+            clip_on=False,
+            zorder=5,
+        )
+
     plt.tight_layout()
     if save_path:
         plt.savefig(save_path, dpi=300)

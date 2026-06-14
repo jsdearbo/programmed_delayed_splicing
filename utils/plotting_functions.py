@@ -9,7 +9,6 @@ import re
 import grelu.visualize
 
 from tangermeme.plot import plot_logo
-from adjustText import adjust_text
 
 logger = logging.getLogger(__name__)
 
@@ -323,6 +322,10 @@ def plot_gene_map(
     if elements_df.empty:
         ax.text(0.5, 0.5, "No elements found for transcript", ha="center", va="center")
         ax.set_title(title)
+        if xlim is not None:
+            ax.set_xlim(*xlim)
+        elif start is not None and end is not None:
+            ax.set_xlim(start, end)
         return
 
     # Determine strand and whether to flip x-axis
@@ -748,38 +751,13 @@ def plot_motif_scatter(
     ax.plot([0, 100], [0, 100], "k--", lw=1.5, label="y = x", zorder=1)
     # ax.plot([0, 22], [0, 22], 'k--', lw=1.5, label='y = x', zorder=1)
 
-    deviation = (df["percent_match_primary"] - df["percent_match_ctrl"]).abs()
-    top = df.loc[deviation.nlargest(topN).index]
+    log2fc = np.log2((df["percent_match_primary"] + 0.5) / (df["percent_match_ctrl"] + 0.5))
+    top = df.loc[log2fc.abs().nlargest(topN).index].copy()
+    top["_lfc"] = log2fc.reindex(top.index)
 
-    texts = []
-
-    import re
+    import re, math
 
     id_pattern = re.compile(r"_(\d+)$")
-
-    for _, row in top.iterrows():
-        motif_name = str(row["motif_name"])
-        m = id_pattern.search(motif_name)
-        motif_label = f"motif {m.group(1)}" if m else "motif"
-        texts.append(
-            ax.text(
-                row["percent_match_ctrl"],
-                row["percent_match_primary"],
-                motif_label,
-                fontsize=12,
-                fontweight="bold",
-                color="black",
-                alpha=0.95,
-                zorder=3,
-            )
-        )
-
-    adjust_text(
-        texts,
-        ax=ax,
-        arrowprops=dict(arrowstyle="-", color="gray", lw=1.2, alpha=0.7),
-        force_explode=(-30, 10),
-    )
 
     ax.set_title(title, pad=15)
     ax.set_xlabel("Percent of Control Introns with Motif", labelpad=10)
@@ -787,6 +765,37 @@ def plot_motif_scatter(
     ax.set_xlim(-2, 102)
     ax.set_ylim(-2, 102)
     ax.grid(True, linestyle=":", linewidth=1, alpha=0.5)
+
+    # Annotate top-N with deterministic offsets so every label is always visible.
+    # Points above the diagonal (enriched in primary) get labels in the upper-left
+    # direction; points below get lower-right.  Each label is staggered by 25° to
+    # reduce overlap within the top-N group.
+    top_sorted = top.sort_values("_lfc", key=abs, ascending=False)
+    n = len(top_sorted)
+    offset = 14  # data units
+
+    for rank, (_, row) in enumerate(top_sorted.iterrows()):
+        xp, yp = row["percent_match_ctrl"], row["percent_match_primary"]
+        m = id_pattern.search(str(row["motif_name"]))
+        motif_label = f"motif {m.group(1)}" if m else str(row["motif_name"])
+
+        base_deg = 135 if row["_lfc"] >= 0 else -45
+        deg = base_deg + (rank - n // 2) * 25
+        rad = math.radians(deg)
+        xt = float(np.clip(xp + offset * math.cos(rad), 2, 96))
+        yt = float(np.clip(yp + offset * math.sin(rad), 2, 96))
+
+        ax.annotate(
+            motif_label,
+            xy=(xp, yp),
+            xytext=(xt, yt),
+            fontsize=11,
+            fontweight="bold",
+            color="black",
+            arrowprops=dict(arrowstyle="-", color="gray", lw=1.0, alpha=0.7),
+            clip_on=False,
+            zorder=5,
+        )
     # ax.legend()
     plt.tight_layout()
     if save_path:
@@ -942,6 +951,20 @@ def _select_elements_for_sequence(
                 f"[select_elements] Strategy C matched gene_name contains '{base}' ({len(subset)} rows)"
             )
             return subset
+
+    # Strategy D: double-underscore delimited unique_IDs (RI/SE event format)
+    # e.g. "B_Cell__RI__Hcn2__chr10_79735872_79735978" → try each __ component
+    if "__" in seq_name and "gene_name" in elements_df.columns:
+        for part in seq_name.split("__"):
+            part = part.strip()
+            if not part or re.match(r"^chr", part, re.IGNORECASE):
+                continue
+            subset = elements_df[elements_df["gene_name"] == part].copy()
+            if not subset.empty:
+                logging.info(
+                    f"[select_elements] Strategy D matched gene_name '{part}' from __ split ({len(subset)} rows)"
+                )
+                return subset
 
     logging.warning(f"[select_elements] No elements found for '{seq_name}'")
     return pd.DataFrame()
@@ -1284,17 +1307,21 @@ def plot_logo_gene_map_and_read_densities(
         timepoints = []
         n_tracks = 0
 
-    # Layout
+    # Layout — cap figsize to prevent genomic coordinate blowup
+    fig_w = min(float(figsize[0]), 40.0)
+    fig_h = min(float(figsize[1]), 20.0)
+    logger.info("[LAYOUT] figsize_in=%s n_tracks=%d → fig_w=%.2f fig_h=%.2f",
+                figsize, n_tracks, fig_w, fig_h)
     if n_tracks == 0:
         fig = plt.figure(
-            figsize=(figsize[0], max(figsize[1], 6.0)), constrained_layout=True
+            figsize=(fig_w, max(fig_h, 6.0)), constrained_layout=True
         )
         gs = fig.add_gridspec(2, 1, height_ratios=[4, 1])
         offset = 2
     else:
         height_ratios = [2, 0.5] + ([1] * n_tracks)
         fig = plt.figure(
-            figsize=(figsize[0], figsize[1] + 2 * n_tracks), constrained_layout=True
+            figsize=(fig_w, fig_h + 2 * n_tracks), constrained_layout=True
         )
         gs = fig.add_gridspec(len(height_ratios), 1, height_ratios=height_ratios)
         offset = len(height_ratios) - n_tracks
@@ -1377,7 +1404,6 @@ def plot_logo_gene_map_and_read_densities(
             alpha=0.5,
             color="orange",
             zorder=100,
-            clip_on=False,
             linewidth=0,
             label="RBP Site",
         )
@@ -1422,6 +1448,6 @@ def plot_logo_gene_map_and_read_densities(
             last_ax.set_xlabel("Genomic Position")
 
     save_path = f"{logo_plot_dir}/logo_map_densities_{seq_name}.png"
-    plt.savefig(save_path, bbox_inches="tight")
+    fig.savefig(save_path)
     plt.close(fig)
     print(f"Saved: {save_path}")

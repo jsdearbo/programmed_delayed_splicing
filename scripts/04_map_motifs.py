@@ -179,6 +179,14 @@ def _prep_indexing_df(
         }
     )
 
+    # Carry gene_name through so _subset_elements_for_indexing can filter the GTF
+    # correctly instead of falling back to the rsplit heuristic (which breaks for
+    # RI/SE unique_IDs of the form "CellType__EventType__GeneName__chrom_start_end").
+    if "gene_name" in df.columns:
+        idx["gene_name"] = df["gene_name"].astype(str)
+    elif "gene_symbol" in df.columns:
+        idx["gene_name"] = df["gene_symbol"].astype(str)
+
     if attr_respect_to == "whole_transcript":
         idx["element_start"] = idx["start"]
         idx["element_end"] = idx["end"]

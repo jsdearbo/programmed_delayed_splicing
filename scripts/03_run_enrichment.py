@@ -47,6 +47,29 @@ logger = logging.getLogger(__name__)
 def parse_args():
     p = argparse.ArgumentParser(description="Run motif enrichment analysis")
     p.add_argument("--config", required=True, help="Path to YAML config file")
+    p.add_argument(
+        "--pattern-filter",
+        choices=["all", "pos", "neg"],
+        default="all",
+        help="Restrict motifs to pos_pattern_* or neg_pattern_* entries only. "
+             "Outputs go to enrichment_pos_only/ or enrichment_neg_only/ "
+             "instead of enrichment/ (default: all).",
+    )
+    p.add_argument(
+        "--source-subset",
+        default=None,
+        help="Override enrichment.source_subset from config "
+             "(e.g. high_psi_seqs_modisco). Determines which per-bin MoDISco "
+             "motif file is used as FIMO input.",
+    )
+    p.add_argument(
+        "--only-comparison",
+        nargs=2,
+        metavar=("PRIMARY", "CONTROL"),
+        default=None,
+        help="Run only this one comparison, e.g. --only-comparison high_psi low_psi. "
+             "Use 'rest' as CONTROL to mean the complement of the primary bin.",
+    )
     return p.parse_args()
 
 
@@ -106,6 +129,41 @@ def get_subset_sequences(subset_mask, input_seqs, mapping_df, coord_data, flank=
     return seqs, names
 
 
+def filter_meme_file(input_path: str, output_path: str, name_prefix: str) -> int:
+    """Write a MEME file keeping only motifs whose name starts with name_prefix.
+
+    Returns the number of motifs written.
+    """
+    header, blocks = [], []
+    in_header = True
+    current_name, current_lines = None, []
+
+    with open(input_path) as fh:
+        for line in fh:
+            if in_header:
+                if line.startswith("MOTIF "):
+                    in_header = False
+                else:
+                    header.append(line)
+                    continue
+            if line.startswith("MOTIF "):
+                if current_name and current_name.startswith(name_prefix):
+                    blocks.extend(current_lines)
+                current_name = line.split()[1]
+                current_lines = [line]
+            else:
+                current_lines.append(line)
+        if current_name and current_name.startswith(name_prefix):
+            blocks.extend(current_lines)
+
+    with open(output_path, "w") as fh:
+        fh.writelines(header)
+        fh.writelines(blocks)
+
+    kept = sum(1 for l in blocks if l.startswith("MOTIF "))
+    return kept
+
+
 def main():
     args = parse_args()
     cfg = load_config(args.config)
@@ -117,8 +175,13 @@ def main():
     # Which MoDISco run to take motifs from
     enrich_cfg = cfg.get("enrichment", {})
     source_subset = enrich_cfg.get("source_subset", "all_seqs_modisco")
+    if args.source_subset is not None:
+        source_subset = args.source_subset
     source_flank = enrich_cfg.get("source_flank", "masked_50bp_flank")
     comparisons = enrich_cfg.get("comparisons", [])
+    if args.only_comparison is not None:
+        primary_override, control_override = args.only_comparison
+        comparisons = [{"primary": primary_override, "control": control_override}]
     run_sea = enrich_cfg.get("run_sea", True)
     run_fimo = enrich_cfg.get("run_fimo", True)
     dedupe_overlaps = cfg.get("dedupe_overlaps", True)
@@ -152,6 +215,17 @@ def main():
             )
     logger.info(f"Using motifs from: {motif_file}")
 
+    pattern_filter = args.pattern_filter
+    if pattern_filter != "all":
+        prefix = f"{pattern_filter}_pattern_"
+        filtered_name = f"forward_{pattern_filter}_only.meme"
+        filtered_file = os.path.join(os.path.dirname(motif_file), filtered_name)
+        n_kept = filter_meme_file(motif_file, filtered_file, prefix)
+        logger.info(
+            f"Pattern filter '{pattern_filter}': kept {n_kept} motifs → {filtered_file}"
+        )
+        motif_file = filtered_file
+
     # Load data produced by step 1
     with open(os.path.join(experiment_dir, "input_seqs.pkl"), "rb") as f:
         input_seqs = pickle.load(f)
@@ -163,8 +237,9 @@ def main():
     subset_masks = {}
     if groupby_col and groupby_col in coord_data.columns:
         for val in coord_data[groupby_col].unique():
-            label = f"{val}_seqs"
-            subset_masks[label] = (coord_data[groupby_col] == val).values
+            mask = (coord_data[groupby_col] == val).values
+            subset_masks[f"{val}_seqs"] = mask
+            subset_masks[f"not_{val}_seqs"] = ~mask
     subset_masks["all_seqs"] = np.ones(len(coord_data), dtype=bool)
 
     # Generate FASTA files for every subset
@@ -209,7 +284,10 @@ def main():
 
     for comp in comparisons:
         prim_label = f"{comp['primary']}_seqs"
-        ctrl_label = f"{comp['control']}_seqs"
+        ctrl = comp["control"]
+        if ctrl == "rest":
+            ctrl = f"not_{comp['primary']}"
+        ctrl_label = f"{ctrl}_seqs"
         if prim_label not in fasta_paths or ctrl_label not in fasta_paths:
             logger.warning(
                 f"Skipping {prim_label} vs {ctrl_label}: subset FASTA not found."
@@ -234,8 +312,11 @@ def main():
                 )
                 ctrl_fasta = fasta_paths[ctrl_label]
 
+        enrich_root = (
+            f"enrichment_{pattern_filter}_only" if pattern_filter != "all" else "enrichment"
+        )
         comp_dir = os.path.join(
-            experiment_dir, "enrichment", source_subset, f"{prim_label}_vs_{ctrl_label}"
+            experiment_dir, enrich_root, source_subset, f"{prim_label}_vs_{ctrl_label}"
         )
         run_enrichment_analysis(
             primary_fasta=fasta_paths[prim_label],
