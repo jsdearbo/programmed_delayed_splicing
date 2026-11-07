@@ -68,6 +68,7 @@ def main():
     flanks = cfg.get("flank", [500, 50])
     modisco_len = cfg.get("modisco_len", 100)
     groupby_col = cfg.get("groupby_column")  # e.g. 'expression' → splits up/down/all
+    elements_file = cfg.get("elements_file")  # exon/intron/UTR table for exon-based mask modes
 
     if isinstance(flanks, int):
         flanks = [flanks]
@@ -91,6 +92,19 @@ def main():
     mapping_df = pd.read_csv(os.path.join(experiment_dir, "attribution_mapping.csv"))
     coord_data = pd.read_csv(coord_file_path)
     logger.info(f"Loaded {len(coord_data)} coordinate rows")
+
+    # Elements table (exons/introns/UTRs), required by exon-based mask modes
+    # (adjacent_exons, upstream_exon, downstream_exon, intron_and_adjacent_exons).
+    elements_df = None
+    if elements_file:
+        validate_file(elements_file, "Elements file")
+        elements_df = pd.read_csv(elements_file)
+        logger.info(f"Loaded elements_df: {len(elements_df)} rows from {elements_file}")
+
+    # Exon-based modes look up transcript/intron via a 'unique_ID' column; the
+    # intron coord tables use 'intron_name' in the same transcript_intronNo format.
+    if "unique_ID" not in coord_data.columns and "intron_name" in coord_data.columns:
+        coord_data["unique_ID"] = coord_data["intron_name"]
 
     # Convert to native-only attributions
     native_only = []
@@ -143,6 +157,7 @@ def main():
                 model,
                 mode=mask_mode,
                 flank=flank,
+                elements_df=elements_df,
             )
 
             # QA: report zero-variance windows

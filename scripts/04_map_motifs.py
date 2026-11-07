@@ -170,7 +170,11 @@ def _prep_indexing_df(
             "unique_ID": (
                 df["unique_ID"].astype(str)
                 if "unique_ID" in df.columns
-                else df["name"].astype(str)
+                else (
+                    df["name"].astype(str)
+                    if "name" in df.columns
+                    else df["intron_name"].astype(str)
+                )
             ),
             "chrom": df[chrom_col].astype(str),
             "start": df["start"].astype(int),
