@@ -1,0 +1,1206 @@
+[2026-10-24 16:59:24] === pipeline start; sea=/home/jdearborn/meme/bin/sea ===
+[2026-10-24 16:59:24] checkpoint: -rw-rw-r-- 1 jdearborn jdearborn 2055743678 Oct 24 16:55 /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+[2026-10-24 16:59:24] ########## SET 50_filt ##########
+[2026-10-24 16:59:24] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/01_get_attributions.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_filt.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt
+INFO:__main__:Using genome: mm10
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:__main__:Using device: cuda
+INFO:__main__:Tasks selected (3): ['task_0', 'task_1', 'task_2'] ...
+INFO:__main__:Loaded 31 coordinate rows
+INFO:utils.sequence_functions:Preparing inputs: centering_mode=intron_only, attr_respect_to=intron_only
+INFO:__main__:Processing: Cd44-201_10
+INFO:__main__:Processing: Cd44-201_12
+INFO:__main__:Processing: Dhx40-201_1
+INFO:__main__:Processing: Cmpk2-201_2
+INFO:__main__:Processing: Cmpk2-201_3
+INFO:__main__:Processing: Rsad2-201_5
+INFO:__main__:Processing: Rnf19a-201_8
+INFO:__main__:Processing: Rnf19a-201_9
+INFO:__main__:Processing: Tma16-201_2
+INFO:__main__:Processing: Fam20c-201_1
+INFO:__main__:Processing: Gbp9-201_7
+INFO:__main__:Processing: Gm4951-201_2
+INFO:__main__:Processing: Usp18-201_4
+INFO:__main__:Processing: Clec4e-201_1
+INFO:__main__:Processing: Nfkbiz-201_3
+INFO:__main__:Processing: Nfkbiz-201_4
+INFO:__main__:Processing: Nfkbiz-201_5
+INFO:__main__:Processing: Nfkbiz-201_6
+INFO:__main__:Processing: Prdm1-201_4
+INFO:__main__:Processing: Zswim4-201_9
+INFO:__main__:Processing: Parp14-201_7
+INFO:__main__:Processing: Frmd6-201_13
+INFO:__main__:Processing: Gbp5-201_3
+INFO:__main__:Processing: Tnfaip2-201_6
+INFO:__main__:Processing: Irf7-203_5
+INFO:__main__:Processing: Oasl1-202_4
+INFO:__main__:Processing: Sirt2-208_6
+INFO:__main__:Processing: Fnbp1l-203_10
+INFO:__main__:Processing: Fnbp1l-203_11
+INFO:__main__:Processing: Phlda1-201_1
+INFO:__main__:Processing: Icam4-202_1
+INFO:__main__:Done. Saved 31 attributions to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+[2026-10-24 17:00:13]   -> exit 0
+[2026-10-24 17:00:13] copied attribution outputs io_50_filt -> ae_50_filt
+[2026-10-24 17:00:13] ---- io_50_filt: modisco ----
+[2026-10-24 17:00:13] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_filt.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/attributions.pkl
+INFO:__main__:Loaded 31 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+INFO:__main__:Zero-variance windows: 0
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:utils.modeling_functions:TF-MoDISco analysis completed
+INFO:utils.enrichment_functions:Loading motifs from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/combined.meme
+INFO:__main__:MoDISco analysis complete.
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Using completed attributions
+attrs shape before slicing: (31, 4, 524288)
+attrs shape after slicing: (31, 4, 5000)
+Running modisco
+4 positive and 19 negative patterns were found.
+Writing modisco output
+Creating sequence logos
+Creating html report
+[2026-10-24 17:09:50]   -> exit 0
+[2026-10-24 17:09:50] ---- io_50_filt: enrichment ----
+[2026-10-24 17:09:50] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_filt.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt
+INFO:__main__:Using motifs from: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:Loaded 31 coordinate rows
+INFO:__main__:FASTA written for 'all_seqs': 31 sequences → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/fasta_files/all_seqs.fa
+INFO:__main__:Registered pre-built control FASTA 'tnf_controls_seqs' → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+INFO:__main__:Enrichment: all_seqs vs tnf_controls_seqs
+INFO:__main__:Removing overlaps from control (tnf_controls_seqs)...
+INFO:utils.sequence_functions:Loaded 31 sequences from primary: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/fasta_files/all_seqs.fa
+INFO:utils.sequence_functions:Removed 31 overlapping sequences from control (1456 → 1425)
+INFO:utils.sequence_functions:Filtered control written to: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa
+INFO:utils.enrichment_functions:Starting enrichment analysis → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs
+INFO:utils.enrichment_functions:Running SEA: sea --verbosity 1 --oc /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea --thresh 1000000.0 --align center --p /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/fasta_files/all_seqs.fa --n /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa --m /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea/sea_enrichment_scatter.png
+INFO:utils.enrichment_functions:Loaded 23 motifs for FIMO.
+INFO:utils.enrichment_functions:FIMO: 31 primary seqs, 1425 control seqs
+INFO:utils.enrichment_functions:FIMO results saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment.csv
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment_scatter.png
+INFO:__main__:Enrichment analysis complete.
+[2026-10-24 17:14:10]   -> exit 0
+[2026-10-24 17:14:10] ---- io_50_filt: map_motifs ----
+[2026-10-24 17:14:10] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_filt.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] MoDISco H5:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Motif file:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Plot dir:    /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_filt/all_seqs_modisco/masked_-5bp_flank/plots
+INFO:__main__:Loaded 23 motifs; selected 23
+Traceback (most recent call last):
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3641, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 168, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 197, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7668, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7676, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 511, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 407, in main
+    idx_df = _prep_indexing_df(
+             ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 173, in _prep_indexing_df
+    else df["name"].astype(str)
+         ~~^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/frame.py", line 4378, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3648, in get_loc
+    raise KeyError(key) from err
+KeyError: 'name'
+[2026-10-24 17:14:18]   -> exit 1
+[2026-10-24 17:14:18] step4 FAILED io_50_filt (non-fatal)
+[2026-10-24 17:14:18] ---- ae_50_filt: modisco ----
+[2026-10-24 17:14:18] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_50_filt.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_filt
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_filt/attributions.pkl
+INFO:__main__:Loaded 31 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 170, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 140, in main
+    masked_attrs = mask_attributions(
+                   ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/utils/sequence_functions.py", line 580, in mask_attributions
+    raise ValueError("elements_df is required for exon-based modes.")
+ValueError: elements_df is required for exon-based modes.
+[2026-10-24 17:14:36]   -> exit 1
+[2026-10-24 17:14:36] step2 FAILED ae_50_filt
+[2026-10-24 17:14:36] ---- ae_50_filt: enrichment ----
+[2026-10-24 17:14:36] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_50_filt.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_filt
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 336, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 212, in main
+    raise FileNotFoundError(
+FileNotFoundError: Motif file not found at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme (or meme.txt). Run 02_run_modisco.py first.
+[2026-10-24 17:14:42]   -> exit 1
+[2026-10-24 17:14:42] step3 FAILED ae_50_filt
+[2026-10-24 17:14:42] ---- ae_50_filt: map_motifs ----
+[2026-10-24 17:14:42] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_50_filt.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+WARNING:__main__:[subset=all_seqs_modisco][flank=-5] Could not find MoDISco H5. Skipping.
+INFO:__main__:Total runtime: 0d 0h 0m 0.00s
+[2026-10-24 17:14:50]   -> exit 0
+[2026-10-24 17:14:50] ########## SET 50_orig ##########
+[2026-10-24 17:14:50] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/01_get_attributions.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_orig.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig
+INFO:__main__:Using genome: mm10
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:__main__:Using device: cuda
+INFO:__main__:Tasks selected (3): ['task_0', 'task_1', 'task_2'] ...
+INFO:__main__:Loaded 50 coordinate rows
+INFO:utils.sequence_functions:Preparing inputs: centering_mode=intron_only, attr_respect_to=intron_only
+INFO:__main__:Processing: Cd44-201_1
+INFO:__main__:Processing: Cd44-201_10
+INFO:__main__:Processing: Cd44-201_12
+INFO:__main__:Processing: Dhx40-201_1
+INFO:__main__:Processing: Cmpk2-201_2
+INFO:__main__:Processing: Cmpk2-201_3
+INFO:__main__:Processing: Rsad2-201_5
+INFO:__main__:Processing: Rnf19a-201_8
+INFO:__main__:Processing: Rnf19a-201_9
+INFO:__main__:Processing: Tma16-201_2
+INFO:__main__:Processing: Fam20c-201_1
+INFO:__main__:Processing: Fam20c-201_2
+INFO:__main__:Processing: Cers6-201_6
+INFO:__main__:Processing: Zbp1-201_3
+INFO:__main__:Processing: Gbp9-201_7
+INFO:__main__:Processing: Gm4951-201_2
+INFO:__main__:Processing: Usp18-201_4
+INFO:__main__:Processing: Clec4e-201_1
+INFO:__main__:Processing: Med21-201_1
+INFO:__main__:Processing: Nfkbib-201_6
+INFO:__main__:Processing: Fchsd2-201_8
+INFO:__main__:Processing: Nfkbiz-201_3
+INFO:__main__:Processing: Nfkbiz-201_4
+INFO:__main__:Processing: Nfkbiz-201_5
+INFO:__main__:Processing: Nfkbiz-201_6
+INFO:__main__:Processing: Prdm1-201_1
+INFO:__main__:Processing: Prdm1-201_4
+INFO:__main__:Processing: Prdm1-201_5
+INFO:__main__:Processing: Zswim4-201_9
+INFO:__main__:Processing: Parp14-201_2
+INFO:__main__:Processing: Parp14-201_7
+INFO:__main__:Processing: Parp14-201_8
+INFO:__main__:Processing: Tnfsf10-201_1
+INFO:__main__:Processing: Frmd6-201_13
+INFO:__main__:Processing: Cnrip1-201_2
+INFO:__main__:Processing: Icam1-201_2
+INFO:__main__:Processing: Gbp5-201_3
+INFO:__main__:Processing: Nlrp3-202_7
+INFO:__main__:Processing: Tnfaip2-201_6
+INFO:__main__:Processing: Irf7-203_5
+INFO:__main__:Processing: Gem-202_2
+INFO:__main__:Processing: Irf1-202_3
+INFO:__main__:Processing: Oasl1-202_4
+INFO:__main__:Processing: Klf7-202_3
+INFO:__main__:Processing: Sgms1-209_1
+INFO:__main__:Processing: Sirt2-208_6
+INFO:__main__:Processing: Fnbp1l-203_10
+INFO:__main__:Processing: Fnbp1l-203_11
+INFO:__main__:Processing: Phlda1-201_1
+INFO:__main__:Processing: Icam4-202_1
+INFO:__main__:Done. Saved 50 attributions to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+[2026-10-24 17:16:01]   -> exit 0
+[2026-10-24 17:16:01] copied attribution outputs io_50_orig -> ae_50_orig
+[2026-10-24 17:16:01] ---- io_50_orig: modisco ----
+[2026-10-24 17:16:01] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_orig.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/attributions.pkl
+INFO:__main__:Loaded 50 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+INFO:__main__:Zero-variance windows: 0
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:utils.modeling_functions:TF-MoDISco analysis completed
+INFO:utils.enrichment_functions:Loading motifs from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/combined.meme
+INFO:__main__:MoDISco analysis complete.
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Using completed attributions
+attrs shape before slicing: (50, 4, 524288)
+attrs shape after slicing: (50, 4, 5000)
+Running modisco
+16 positive and 18 negative patterns were found.
+Writing modisco output
+Creating sequence logos
+Creating html report
+[2026-10-24 17:34:38]   -> exit 0
+[2026-10-24 17:34:38] ---- io_50_orig: enrichment ----
+[2026-10-24 17:34:38] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_orig.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig
+INFO:__main__:Using motifs from: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:Loaded 50 coordinate rows
+INFO:__main__:FASTA written for 'all_seqs': 50 sequences → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/fasta_files/all_seqs.fa
+INFO:__main__:Registered pre-built control FASTA 'tnf_controls_seqs' → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+INFO:__main__:Enrichment: all_seqs vs tnf_controls_seqs
+INFO:__main__:Removing overlaps from control (tnf_controls_seqs)...
+INFO:utils.sequence_functions:Loaded 50 sequences from primary: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/fasta_files/all_seqs.fa
+INFO:utils.sequence_functions:Removed 50 overlapping sequences from control (1456 → 1406)
+INFO:utils.sequence_functions:Filtered control written to: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa
+INFO:utils.enrichment_functions:Starting enrichment analysis → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs
+INFO:utils.enrichment_functions:Running SEA: sea --verbosity 1 --oc /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea --thresh 1000000.0 --align center --p /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/fasta_files/all_seqs.fa --n /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa --m /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea/sea_enrichment_scatter.png
+INFO:utils.enrichment_functions:Loaded 34 motifs for FIMO.
+INFO:utils.enrichment_functions:FIMO: 50 primary seqs, 1406 control seqs
+INFO:utils.enrichment_functions:FIMO results saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment.csv
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment_scatter.png
+INFO:__main__:Enrichment analysis complete.
+[2026-10-24 17:43:50]   -> exit 0
+[2026-10-24 17:43:50] ---- io_50_orig: map_motifs ----
+[2026-10-24 17:43:50] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_50_orig.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] MoDISco H5:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Motif file:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Plot dir:    /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig/all_seqs_modisco/masked_-5bp_flank/plots
+INFO:__main__:Loaded 34 motifs; selected 34
+Traceback (most recent call last):
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3641, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 168, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 197, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7668, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7676, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 511, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 407, in main
+    idx_df = _prep_indexing_df(
+             ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 173, in _prep_indexing_df
+    else df["name"].astype(str)
+         ~~^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/frame.py", line 4378, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3648, in get_loc
+    raise KeyError(key) from err
+KeyError: 'name'
+[2026-10-24 17:43:57]   -> exit 1
+[2026-10-24 17:43:57] step4 FAILED io_50_orig (non-fatal)
+[2026-10-24 17:43:57] ---- ae_50_orig: modisco ----
+[2026-10-24 17:43:57] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_50_orig.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/attributions.pkl
+INFO:__main__:Loaded 50 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 170, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 140, in main
+    masked_attrs = mask_attributions(
+                   ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/utils/sequence_functions.py", line 580, in mask_attributions
+    raise ValueError("elements_df is required for exon-based modes.")
+ValueError: elements_df is required for exon-based modes.
+[2026-10-24 17:44:19]   -> exit 1
+[2026-10-24 17:44:19] step2 FAILED ae_50_orig
+[2026-10-24 17:44:19] ---- ae_50_orig: enrichment ----
+[2026-10-24 17:44:19] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_50_orig.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 336, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 212, in main
+    raise FileNotFoundError(
+FileNotFoundError: Motif file not found at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme (or meme.txt). Run 02_run_modisco.py first.
+[2026-10-24 17:44:25]   -> exit 1
+[2026-10-24 17:44:25] step3 FAILED ae_50_orig
+[2026-10-24 17:44:25] ---- ae_50_orig: map_motifs ----
+[2026-10-24 17:44:25] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_50_orig.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+WARNING:__main__:[subset=all_seqs_modisco][flank=-5] Could not find MoDISco H5. Skipping.
+INFO:__main__:Total runtime: 0d 0h 0m 0.00s
+[2026-10-24 17:44:33]   -> exit 0
+[2026-10-24 17:44:33] ########## SET 150_filt ##########
+[2026-10-24 17:44:33] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/01_get_attributions.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_filt.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt
+INFO:__main__:Using genome: mm10
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:__main__:Using device: cuda
+INFO:__main__:Tasks selected (3): ['task_0', 'task_1', 'task_2'] ...
+INFO:__main__:Loaded 120 coordinate rows
+INFO:utils.sequence_functions:Preparing inputs: centering_mode=intron_only, attr_respect_to=intron_only
+INFO:__main__:Processing: Ifrd1-201_8
+INFO:__main__:Processing: Plaur-201_6
+INFO:__main__:Processing: Ier3-201_1
+INFO:__main__:Processing: Cd44-201_10
+INFO:__main__:Processing: Cd44-201_12
+INFO:__main__:Processing: Cd83-201_1
+INFO:__main__:Processing: Mapkapk2-201_3
+INFO:__main__:Processing: Cd40-201_1
+INFO:__main__:Processing: Cd40-201_7
+INFO:__main__:Processing: Dhx40-201_1
+INFO:__main__:Processing: Dhx40-201_15
+INFO:__main__:Processing: Cmpk2-201_2
+INFO:__main__:Processing: Cmpk2-201_3
+INFO:__main__:Processing: Cmpk2-201_4
+INFO:__main__:Processing: Rsad2-201_5
+INFO:__main__:Processing: Nfkbia-201_5
+INFO:__main__:Processing: Fos-201_1
+INFO:__main__:Processing: Rnf19a-201_8
+INFO:__main__:Processing: Rnf19a-201_9
+INFO:__main__:Processing: Agpat4-201_8
+INFO:__main__:Processing: Nfkbie-201_3
+INFO:__main__:Processing: Nfkbie-201_5
+INFO:__main__:Processing: Dusp1-202_1
+INFO:__main__:Processing: Dusp1-202_2
+INFO:__main__:Processing: Dusp1-202_3
+INFO:__main__:Processing: Tnf-201_1
+INFO:__main__:Processing: Tma16-201_2
+INFO:__main__:Processing: Fam20c-201_1
+INFO:__main__:Processing: Atf3-201_2
+INFO:__main__:Processing: Dusp2-201_1
+INFO:__main__:Processing: Dusp2-201_2
+INFO:__main__:Processing: Dusp2-201_3
+INFO:__main__:Processing: Il1b-201_6
+INFO:__main__:Processing: Gbp9-201_7
+INFO:__main__:Processing: Tfec-201_5
+INFO:__main__:Processing: Tfec-201_6
+INFO:__main__:Processing: Gm4951-201_1
+INFO:__main__:Processing: Gm4951-201_2
+INFO:__main__:Processing: Usp18-201_2
+INFO:__main__:Processing: Usp18-201_4
+INFO:__main__:Processing: Clec4e-201_1
+INFO:__main__:Processing: Clec4e-201_2
+INFO:__main__:Processing: Clec4e-201_3
+INFO:__main__:Processing: Cd69-201_4
+INFO:__main__:Processing: Nfkbib-201_1
+INFO:__main__:Processing: Rab20-201_1
+INFO:__main__:Processing: Dpep3-201_1
+INFO:__main__:Processing: Nfkbiz-201_3
+INFO:__main__:Processing: Nfkbiz-201_4
+INFO:__main__:Processing: Nfkbiz-201_5
+INFO:__main__:Processing: Nfkbiz-201_6
+INFO:__main__:Processing: Nfkbiz-201_13
+INFO:__main__:Processing: Ripk2-201_5
+INFO:__main__:Processing: Prdm1-201_4
+INFO:__main__:Processing: Prdm1-201_6
+INFO:__main__:Processing: Zswim4-201_9
+INFO:__main__:Processing: Zswim4-201_10
+INFO:__main__:Processing: Zswim4-201_13
+INFO:__main__:Processing: Tnfsf9-201_2
+INFO:__main__:Processing: Parp14-201_7
+INFO:__main__:Processing: Arl5c-201_1
+INFO:__main__:Processing: Arl5c-201_3
+INFO:__main__:Processing: Arl5c-201_4
+INFO:__main__:Processing: Arl5c-201_5
+INFO:__main__:Processing: Tbc1d17-201_11
+INFO:__main__:Processing: Tbc1d17-201_14
+INFO:__main__:Processing: AA467197-201_1
+INFO:__main__:Processing: AA467197-201_4
+INFO:__main__:Processing: Frmd6-201_13
+INFO:__main__:Processing: Il27-201_4
+INFO:__main__:Processing: Rcan1-202_3
+INFO:__main__:Processing: Marcksl1-201_1
+INFO:__main__:Processing: Icam1-201_3
+INFO:__main__:Processing: Gbp5-201_3
+INFO:__main__:Processing: Peli1-202_3
+INFO:__main__:Processing: Peli1-202_4
+INFO:__main__:Processing: Tnfaip2-201_6
+INFO:__main__:Processing: Ifit3-201_1
+INFO:__main__:Processing: Plek-202_7
+INFO:__main__:Processing: Agrn-203_32
+INFO:__main__:Processing: Irf7-203_5
+INFO:__main__:Processing: Gbp3-202_6
+INFO:__main__:Processing: Gbp3-202_8
+INFO:__main__:Processing: Pde4b-207_7
+INFO:__main__:Processing: Pde4b-207_14
+INFO:__main__:Processing: Bcl2l11-205_1
+INFO:__main__:Processing: Slc28a2-203_16
+INFO:__main__:Processing: Ifi204-201_3
+INFO:__main__:Processing: Ifi204-201_7
+INFO:__main__:Processing: Oasl1-202_2
+INFO:__main__:Processing: Oasl1-202_4
+INFO:__main__:Processing: Foxp4-204_14
+INFO:__main__:Processing: Samsn1-201_7
+INFO:__main__:Processing: Il4i1-202_7
+INFO:__main__:Processing: Il4i1-202_8
+INFO:__main__:Processing: Isg20-204_3
+INFO:__main__:Processing: Cfb-202_10
+INFO:__main__:Processing: Cfb-202_15
+INFO:__main__:Processing: Sirt2-208_2
+INFO:__main__:Processing: Sirt2-208_5
+INFO:__main__:Processing: Sirt2-208_6
+INFO:__main__:Processing: Gnb4-205_6
+INFO:__main__:Processing: Gnb4-205_7
+INFO:__main__:Processing: Fnbp1l-203_4
+INFO:__main__:Processing: Fnbp1l-203_10
+INFO:__main__:Processing: Fnbp1l-203_11
+INFO:__main__:Processing: Fnbp1l-203_14
+INFO:__main__:Processing: Fnbp1l-203_15
+INFO:__main__:Processing: Phlda1-201_1
+INFO:__main__:Processing: Gbp2-201_1
+INFO:__main__:Processing: Gbp2-201_2
+INFO:__main__:Processing: Gbp2-201_10
+INFO:__main__:Processing: Ppp1r15a-202_1
+INFO:__main__:Processing: Rnf19b-206_5
+INFO:__main__:Processing: Daxx-202_6
+INFO:__main__:Processing: Daxx-202_7
+INFO:__main__:Processing: Traf1-207_5
+INFO:__main__:Processing: Cxcl2-202_2
+INFO:__main__:Processing: Icam4-202_1
+INFO:__main__:Processing: Nr4a1-202_7
+INFO:__main__:Done. Saved 120 attributions to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+[2026-10-24 17:47:03]   -> exit 0
+[2026-10-24 17:47:04] copied attribution outputs io_150_filt -> ae_150_filt
+[2026-10-24 17:47:04] ---- io_150_filt: modisco ----
+[2026-10-24 17:47:04] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_filt.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/attributions.pkl
+INFO:__main__:Loaded 120 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+INFO:__main__:Zero-variance windows: 0
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:utils.modeling_functions:TF-MoDISco analysis completed
+INFO:utils.enrichment_functions:Loading motifs from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/combined.meme
+INFO:__main__:MoDISco analysis complete.
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Using completed attributions
+attrs shape before slicing: (120, 4, 524288)
+attrs shape after slicing: (120, 4, 5000)
+Running modisco
+24 positive and 22 negative patterns were found.
+Writing modisco output
+Creating sequence logos
+Creating html report
+[2026-10-24 18:15:53]   -> exit 0
+[2026-10-24 18:15:53] ---- io_150_filt: enrichment ----
+[2026-10-24 18:15:53] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_filt.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt
+INFO:__main__:Using motifs from: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:Loaded 120 coordinate rows
+INFO:__main__:FASTA written for 'all_seqs': 120 sequences → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/fasta_files/all_seqs.fa
+INFO:__main__:Registered pre-built control FASTA 'tnf_controls_seqs' → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+INFO:__main__:Enrichment: all_seqs vs tnf_controls_seqs
+INFO:__main__:Removing overlaps from control (tnf_controls_seqs)...
+INFO:utils.sequence_functions:Loaded 120 sequences from primary: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/fasta_files/all_seqs.fa
+INFO:utils.sequence_functions:Removed 120 overlapping sequences from control (1456 → 1336)
+INFO:utils.sequence_functions:Filtered control written to: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa
+INFO:utils.enrichment_functions:Starting enrichment analysis → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs
+INFO:utils.enrichment_functions:Running SEA: sea --verbosity 1 --oc /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea --thresh 1000000.0 --align center --p /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/fasta_files/all_seqs.fa --n /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa --m /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea/sea_enrichment_scatter.png
+INFO:utils.enrichment_functions:Loaded 46 motifs for FIMO.
+INFO:utils.enrichment_functions:FIMO: 120 primary seqs, 1336 control seqs
+INFO:utils.enrichment_functions:FIMO results saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment.csv
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment_scatter.png
+INFO:__main__:Enrichment analysis complete.
+[2026-10-24 18:43:14]   -> exit 0
+[2026-10-24 18:43:14] ---- io_150_filt: map_motifs ----
+[2026-10-24 18:43:14] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_filt.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] MoDISco H5:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Motif file:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Plot dir:    /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_filt/all_seqs_modisco/masked_-5bp_flank/plots
+INFO:__main__:Loaded 46 motifs; selected 46
+Traceback (most recent call last):
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3641, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 168, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 197, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7668, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7676, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 511, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 407, in main
+    idx_df = _prep_indexing_df(
+             ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 173, in _prep_indexing_df
+    else df["name"].astype(str)
+         ~~^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/frame.py", line 4378, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3648, in get_loc
+    raise KeyError(key) from err
+KeyError: 'name'
+[2026-10-24 18:43:22]   -> exit 1
+[2026-10-24 18:43:22] step4 FAILED io_150_filt (non-fatal)
+[2026-10-24 18:43:22] ---- ae_150_filt: modisco ----
+[2026-10-24 18:43:22] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_150_filt.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/attributions.pkl
+INFO:__main__:Loaded 120 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 170, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 140, in main
+    masked_attrs = mask_attributions(
+                   ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/utils/sequence_functions.py", line 580, in mask_attributions
+    raise ValueError("elements_df is required for exon-based modes.")
+ValueError: elements_df is required for exon-based modes.
+[2026-10-24 18:43:55]   -> exit 1
+[2026-10-24 18:43:55] step2 FAILED ae_150_filt
+[2026-10-24 18:43:55] ---- ae_150_filt: enrichment ----
+[2026-10-24 18:43:55] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_150_filt.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 336, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 212, in main
+    raise FileNotFoundError(
+FileNotFoundError: Motif file not found at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme (or meme.txt). Run 02_run_modisco.py first.
+[2026-10-24 18:44:01]   -> exit 1
+[2026-10-24 18:44:01] step3 FAILED ae_150_filt
+[2026-10-24 18:44:01] ---- ae_150_filt: map_motifs ----
+[2026-10-24 18:44:01] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_150_filt.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+WARNING:__main__:[subset=all_seqs_modisco][flank=-5] Could not find MoDISco H5. Skipping.
+INFO:__main__:Total runtime: 0d 0h 0m 0.00s
+[2026-10-24 18:44:09]   -> exit 0
+[2026-10-24 18:44:09] ########## SET 150_orig ##########
+[2026-10-24 18:44:09] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/01_get_attributions.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_orig.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig
+INFO:__main__:Using genome: mm10
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:__main__:Using device: cuda
+INFO:__main__:Tasks selected (3): ['task_0', 'task_1', 'task_2'] ...
+INFO:__main__:Loaded 150 coordinate rows
+INFO:utils.sequence_functions:Preparing inputs: centering_mode=intron_only, attr_respect_to=intron_only
+INFO:__main__:Processing: Ccnd2-201_4
+INFO:__main__:Processing: Ifrd1-201_8
+INFO:__main__:Processing: Plaur-201_6
+INFO:__main__:Processing: Ier3-201_1
+INFO:__main__:Processing: Cd44-201_1
+INFO:__main__:Processing: Cd44-201_10
+INFO:__main__:Processing: Cd44-201_12
+INFO:__main__:Processing: Cd83-201_1
+INFO:__main__:Processing: Mapkapk2-201_3
+INFO:__main__:Processing: Cd40-201_1
+INFO:__main__:Processing: Cd40-201_7
+INFO:__main__:Processing: Dhx40-201_1
+INFO:__main__:Processing: Dhx40-201_15
+INFO:__main__:Processing: Cmpk2-201_2
+INFO:__main__:Processing: Cmpk2-201_3
+INFO:__main__:Processing: Cmpk2-201_4
+INFO:__main__:Processing: Rsad2-201_5
+INFO:__main__:Processing: Nfkbia-201_5
+INFO:__main__:Processing: Fos-201_1
+INFO:__main__:Processing: Rnf19a-201_8
+INFO:__main__:Processing: Rnf19a-201_9
+INFO:__main__:Processing: Agpat4-201_8
+INFO:__main__:Processing: Nfkbie-201_3
+INFO:__main__:Processing: Nfkbie-201_5
+INFO:__main__:Processing: Dusp1-202_1
+INFO:__main__:Processing: Dusp1-202_2
+INFO:__main__:Processing: Dusp1-202_3
+INFO:__main__:Processing: Tnf-201_1
+INFO:__main__:Processing: Tma16-201_2
+INFO:__main__:Processing: Fam20c-201_1
+INFO:__main__:Processing: Fam20c-201_2
+INFO:__main__:Processing: Fam20c-201_3
+INFO:__main__:Processing: Atf3-201_2
+INFO:__main__:Processing: Cers6-201_1
+INFO:__main__:Processing: Cers6-201_2
+INFO:__main__:Processing: Cers6-201_6
+INFO:__main__:Processing: Dusp2-201_1
+INFO:__main__:Processing: Dusp2-201_2
+INFO:__main__:Processing: Dusp2-201_3
+INFO:__main__:Processing: Il1b-201_6
+INFO:__main__:Processing: Zbp1-201_3
+INFO:__main__:Processing: Ifi44-201_7
+INFO:__main__:Processing: Gbp9-201_7
+INFO:__main__:Processing: Tfec-201_5
+INFO:__main__:Processing: Tfec-201_6
+INFO:__main__:Processing: Gm4951-201_1
+INFO:__main__:Processing: Gm4951-201_2
+INFO:__main__:Processing: Usp18-201_2
+INFO:__main__:Processing: Usp18-201_4
+INFO:__main__:Processing: Clec4e-201_1
+INFO:__main__:Processing: Clec4e-201_2
+INFO:__main__:Processing: Clec4e-201_3
+INFO:__main__:Processing: Cd69-201_4
+INFO:__main__:Processing: Med21-201_1
+INFO:__main__:Processing: Nfkbib-201_1
+INFO:__main__:Processing: Nfkbib-201_6
+INFO:__main__:Processing: Fchsd2-201_8
+INFO:__main__:Processing: Rab20-201_1
+INFO:__main__:Processing: Dpep3-201_1
+INFO:__main__:Processing: Nfkbiz-201_3
+INFO:__main__:Processing: Nfkbiz-201_4
+INFO:__main__:Processing: Nfkbiz-201_5
+INFO:__main__:Processing: Nfkbiz-201_6
+INFO:__main__:Processing: Nfkbiz-201_13
+INFO:__main__:Processing: Ripk2-201_5
+INFO:__main__:Processing: Prdm1-201_1
+INFO:__main__:Processing: Prdm1-201_4
+INFO:__main__:Processing: Prdm1-201_5
+INFO:__main__:Processing: Prdm1-201_6
+INFO:__main__:Processing: Zswim4-201_9
+INFO:__main__:Processing: Zswim4-201_10
+INFO:__main__:Processing: Zswim4-201_13
+INFO:__main__:Processing: Tnfsf9-201_2
+INFO:__main__:Processing: Parp14-201_1
+INFO:__main__:Processing: Parp14-201_2
+INFO:__main__:Processing: Parp14-201_7
+INFO:__main__:Processing: Parp14-201_8
+INFO:__main__:Processing: Arl5c-201_1
+INFO:__main__:Processing: Arl5c-201_3
+INFO:__main__:Processing: Arl5c-201_4
+INFO:__main__:Processing: Arl5c-201_5
+INFO:__main__:Processing: Tnfsf10-201_1
+INFO:__main__:Processing: Tbc1d17-201_11
+INFO:__main__:Processing: Tbc1d17-201_14
+INFO:__main__:Processing: AA467197-201_1
+INFO:__main__:Processing: AA467197-201_4
+INFO:__main__:Processing: Frmd6-201_13
+INFO:__main__:Processing: Cnrip1-201_2
+INFO:__main__:Processing: Il27-201_4
+INFO:__main__:Processing: Rcan1-202_3
+INFO:__main__:Processing: Marcksl1-201_1
+INFO:__main__:Processing: Fpr2-201_1
+INFO:__main__:Processing: Icam1-201_2
+INFO:__main__:Processing: Icam1-201_3
+INFO:__main__:Processing: Gbp5-201_3
+INFO:__main__:Processing: Nlrp3-202_7
+INFO:__main__:Processing: Peli1-202_3
+INFO:__main__:Processing: Peli1-202_4
+INFO:__main__:Processing: Tnfaip2-201_6
+INFO:__main__:Processing: Ifit3-201_1
+INFO:__main__:Processing: Plek-202_7
+INFO:__main__:Processing: Agrn-203_32
+INFO:__main__:Processing: Irf7-203_5
+INFO:__main__:Processing: Gbp3-202_6
+INFO:__main__:Processing: Gbp3-202_8
+INFO:__main__:Processing: Pde4b-207_7
+INFO:__main__:Processing: Pde4b-207_14
+INFO:__main__:Processing: Gem-202_2
+INFO:__main__:Processing: Gem-202_4
+INFO:__main__:Processing: Irf1-202_3
+INFO:__main__:Processing: Snx18-201_1
+INFO:__main__:Processing: Bcl2l11-205_1
+INFO:__main__:Processing: Slc28a2-203_16
+INFO:__main__:Processing: Ifi204-201_3
+INFO:__main__:Processing: Ifi204-201_7
+INFO:__main__:Processing: Oasl1-202_2
+INFO:__main__:Processing: Oasl1-202_4
+INFO:__main__:Processing: Foxp4-204_14
+INFO:__main__:Processing: Klf7-202_3
+INFO:__main__:Processing: Samsn1-201_7
+INFO:__main__:Processing: Il4i1-202_7
+INFO:__main__:Processing: Il4i1-202_8
+INFO:__main__:Processing: Isg20-204_3
+INFO:__main__:Processing: Cfb-202_10
+INFO:__main__:Processing: Cfb-202_15
+INFO:__main__:Processing: Sgms1-209_1
+INFO:__main__:Processing: Sirt2-208_2
+INFO:__main__:Processing: Sirt2-208_5
+INFO:__main__:Processing: Sirt2-208_6
+INFO:__main__:Processing: Gnb4-205_6
+INFO:__main__:Processing: Gnb4-205_7
+INFO:__main__:Processing: Fnbp1l-203_4
+INFO:__main__:Processing: Fnbp1l-203_10
+INFO:__main__:Processing: Fnbp1l-203_11
+INFO:__main__:Processing: Fnbp1l-203_14
+INFO:__main__:Processing: Fnbp1l-203_15
+INFO:__main__:Processing: Phlda1-201_1
+INFO:__main__:Processing: Gbp2-201_1
+INFO:__main__:Processing: Gbp2-201_2
+INFO:__main__:Processing: Gbp2-201_10
+INFO:__main__:Processing: Ppp1r15a-202_1
+INFO:__main__:Processing: Rnf19b-206_5
+INFO:__main__:Processing: Daxx-202_6
+INFO:__main__:Processing: Daxx-202_7
+INFO:__main__:Processing: Klhl25-202_2
+INFO:__main__:Processing: Traf1-207_4
+INFO:__main__:Processing: Traf1-207_5
+INFO:__main__:Processing: Cxcl2-202_2
+INFO:__main__:Processing: Icam4-202_1
+INFO:__main__:Processing: Nr4a1-202_7
+INFO:__main__:Done. Saved 150 attributions to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+[2026-10-24 18:47:14]   -> exit 0
+[2026-10-24 18:47:14] copied attribution outputs io_150_orig -> ae_150_orig
+[2026-10-24 18:47:14] ---- io_150_orig: modisco ----
+[2026-10-24 18:47:14] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_orig.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/attributions.pkl
+INFO:__main__:Loaded 150 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+INFO:__main__:Zero-variance windows: 0
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:utils.modeling_functions:TF-MoDISco analysis completed
+INFO:utils.enrichment_functions:Loading motifs from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/combined.meme
+INFO:__main__:MoDISco analysis complete.
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Using completed attributions
+attrs shape before slicing: (150, 4, 524288)
+attrs shape after slicing: (150, 4, 5000)
+Running modisco
+23 positive and 19 negative patterns were found.
+Writing modisco output
+Creating sequence logos
+Creating html report
+[2026-10-24 19:32:34]   -> exit 0
+[2026-10-24 19:32:34] ---- io_150_orig: enrichment ----
+[2026-10-24 19:32:34] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_orig.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig
+INFO:__main__:Using motifs from: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:Loaded 150 coordinate rows
+INFO:__main__:FASTA written for 'all_seqs': 150 sequences → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/fasta_files/all_seqs.fa
+INFO:__main__:Registered pre-built control FASTA 'tnf_controls_seqs' → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+INFO:__main__:Enrichment: all_seqs vs tnf_controls_seqs
+INFO:__main__:Removing overlaps from control (tnf_controls_seqs)...
+INFO:utils.sequence_functions:Loaded 150 sequences from primary: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/fasta_files/all_seqs.fa
+INFO:utils.sequence_functions:Removed 150 overlapping sequences from control (1456 → 1306)
+INFO:utils.sequence_functions:Filtered control written to: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa
+INFO:utils.enrichment_functions:Starting enrichment analysis → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs
+INFO:utils.enrichment_functions:Running SEA: sea --verbosity 1 --oc /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea --thresh 1000000.0 --align center --p /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/fasta_files/all_seqs.fa --n /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa --m /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea/sea_enrichment_scatter.png
+INFO:utils.enrichment_functions:Loaded 42 motifs for FIMO.
+INFO:utils.enrichment_functions:FIMO: 150 primary seqs, 1306 control seqs
+INFO:utils.enrichment_functions:FIMO results saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment.csv
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment_scatter.png
+INFO:__main__:Enrichment analysis complete.
+[2026-10-24 20:02:49]   -> exit 0
+[2026-10-24 20:02:49] ---- io_150_orig: map_motifs ----
+[2026-10-24 20:02:49] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_io_150_orig.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] MoDISco H5:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Motif file:  /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:[subset=all_seqs_modisco][flank=-5] Plot dir:    /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_150_orig/all_seqs_modisco/masked_-5bp_flank/plots
+INFO:__main__:Loaded 42 motifs; selected 42
+Traceback (most recent call last):
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3641, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 168, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 197, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7668, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7676, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 511, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 407, in main
+    idx_df = _prep_indexing_df(
+             ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/04_map_motifs.py", line 173, in _prep_indexing_df
+    else df["name"].astype(str)
+         ~~^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/frame.py", line 4378, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3648, in get_loc
+    raise KeyError(key) from err
+KeyError: 'name'
+[2026-10-24 20:02:56]   -> exit 1
+[2026-10-24 20:02:56] step4 FAILED io_150_orig (non-fatal)
+[2026-10-24 20:02:56] ---- ae_150_orig: modisco ----
+[2026-10-24 20:02:56] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/02_run_modisco.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_150_orig.yaml
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/attributions.pkl
+INFO:__main__:Loaded 150 coordinate rows
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 170, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/02_run_modisco.py", line 140, in main
+    masked_attrs = mask_attributions(
+                   ^^^^^^^^^^^^^^^^^^
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/utils/sequence_functions.py", line 580, in mask_attributions
+    raise ValueError("elements_df is required for exon-based modes.")
+ValueError: elements_df is required for exon-based modes.
+[2026-10-24 20:03:34]   -> exit 1
+[2026-10-24 20:03:34] step2 FAILED ae_150_orig
+[2026-10-24 20:03:34] ---- ae_150_orig: enrichment ----
+[2026-10-24 20:03:34] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/03_run_enrichment.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_150_orig.yaml
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig
+Traceback (most recent call last):
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 336, in <module>
+    main()
+  File "/mnt/data_sda/jdearborn/scratch/elife_delay_splice/scripts/03_run_enrichment.py", line 212, in main
+    raise FileNotFoundError(
+FileNotFoundError: Motif file not found at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme (or meme.txt). Run 02_run_modisco.py first.
+[2026-10-24 20:03:40]   -> exit 1
+[2026-10-24 20:03:40] step3 FAILED ae_150_orig
+[2026-10-24 20:03:40] ---- ae_150_orig: map_motifs ----
+[2026-10-24 20:03:40] RUN: /mnt/data_sda/miniconda3/envs/grelu-test/bin/python3 scripts/04_map_motifs.py --config /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/rerun2026/config_ae_150_orig.yaml
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:__main__:Loaded 14 BigWig tracks
+INFO:__main__:Discovered RBP subsets: ['all_seqs_modisco']
+INFO:__main__:================================================================================
+INFO:__main__:[SUBSET LOOP] Processing subset = all_seqs_modisco
+INFO:__main__:================================================================================
+INFO:__main__:--------------------------------------------------------------------------------
+INFO:__main__:[subset=all_seqs_modisco] [flank=-5] Running motif mapping
+INFO:__main__:--------------------------------------------------------------------------------
+WARNING:__main__:[subset=all_seqs_modisco][flank=-5] Could not find MoDISco H5. Skipping.
+INFO:__main__:Total runtime: 0d 0h 0m 0.00s
+[2026-10-24 20:03:48]   -> exit 0
+[2026-10-24 20:03:48] === PIPELINE COMPLETE ===

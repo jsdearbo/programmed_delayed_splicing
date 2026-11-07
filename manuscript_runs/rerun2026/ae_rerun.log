@@ -1,0 +1,199 @@
+[22:18:15] ### ae_50_orig step2
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/attributions.pkl
+INFO:__main__:Loaded 50 coordinate rows
+INFO:__main__:Loaded elements_df: 541973 rows from /mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/all_elements.csv
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+INFO:__main__:Zero-variance windows: 0
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:utils.modeling_functions:TF-MoDISco analysis completed
+INFO:utils.enrichment_functions:Loading motifs from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/all_seqs_modisco/masked_-5bp_flank/combined.meme
+INFO:__main__:MoDISco analysis complete.
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Using completed attributions
+attrs shape before slicing: (50, 4, 524288)
+attrs shape after slicing: (50, 4, 5000)
+Running modisco
+1 positive and 8 negative patterns were found.
+Writing modisco output
+Creating sequence logos
+Creating html report
+[22:21:04] ### ae_50_orig step3
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig
+INFO:__main__:Using motifs from: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:Loaded 50 coordinate rows
+INFO:__main__:FASTA written for 'all_seqs': 50 sequences → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/fasta_files/all_seqs.fa
+INFO:__main__:Registered pre-built control FASTA 'tnf_controls_seqs' → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+INFO:__main__:Enrichment: all_seqs vs tnf_controls_seqs
+INFO:__main__:Removing overlaps from control (tnf_controls_seqs)...
+INFO:utils.sequence_functions:Loaded 50 sequences from primary: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/fasta_files/all_seqs.fa
+INFO:utils.sequence_functions:Removed 50 overlapping sequences from control (1456 → 1406)
+INFO:utils.sequence_functions:Filtered control written to: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa
+INFO:utils.enrichment_functions:Starting enrichment analysis → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs
+INFO:utils.enrichment_functions:Running SEA: sea --verbosity 1 --oc /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea --thresh 1000000.0 --align center --p /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/fasta_files/all_seqs.fa --n /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa --m /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea/sea_enrichment_scatter.png
+INFO:utils.enrichment_functions:Loaded 9 motifs for FIMO.
+INFO:utils.enrichment_functions:FIMO: 50 primary seqs, 1406 control seqs
+INFO:utils.enrichment_functions:FIMO results saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment.csv
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_50_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment_scatter.png
+INFO:__main__:Enrichment analysis complete.
+[22:23:54] ### ae_50_orig done
+[22:23:54] ### ae_150_filt step2
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.6
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/attributions.pkl
+INFO:__main__:Loaded 120 coordinate rows
+INFO:__main__:Loaded elements_df: 541973 rows from /mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/all_elements.csv
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+INFO:__main__:Zero-variance windows: 0
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:utils.modeling_functions:TF-MoDISco analysis completed
+INFO:utils.enrichment_functions:Loading motifs from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/all_seqs_modisco/masked_-5bp_flank/combined.meme
+INFO:__main__:MoDISco analysis complete.
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Using completed attributions
+attrs shape before slicing: (120, 4, 524288)
+attrs shape after slicing: (120, 4, 5000)
+Running modisco
+16 positive and 15 negative patterns were found.
+Writing modisco output
+Creating sequence logos
+Creating html report
+[22:40:44] ### ae_150_filt step3
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt
+INFO:__main__:Using motifs from: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:Loaded 120 coordinate rows
+INFO:__main__:FASTA written for 'all_seqs': 120 sequences → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/fasta_files/all_seqs.fa
+INFO:__main__:Registered pre-built control FASTA 'tnf_controls_seqs' → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+INFO:__main__:Enrichment: all_seqs vs tnf_controls_seqs
+INFO:__main__:Removing overlaps from control (tnf_controls_seqs)...
+INFO:utils.sequence_functions:Loaded 120 sequences from primary: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/fasta_files/all_seqs.fa
+INFO:utils.sequence_functions:Removed 120 overlapping sequences from control (1456 → 1336)
+INFO:utils.sequence_functions:Filtered control written to: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa
+INFO:utils.enrichment_functions:Starting enrichment analysis → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs
+INFO:utils.enrichment_functions:Running SEA: sea --verbosity 1 --oc /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea --thresh 1000000.0 --align center --p /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/fasta_files/all_seqs.fa --n /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa --m /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea/sea_enrichment_scatter.png
+INFO:utils.enrichment_functions:Loaded 31 motifs for FIMO.
+INFO:utils.enrichment_functions:FIMO: 120 primary seqs, 1336 control seqs
+INFO:utils.enrichment_functions:FIMO results saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment.csv
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_filt/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment_scatter.png
+INFO:__main__:Enrichment analysis complete.
+[23:00:24] ### ae_150_filt done
+[23:00:24] ### ae_150_orig step2
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig
+INFO:root:[Loader] Loading checkpoint: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jakedearborn (genomic-former). Use `wandb login --relogin` to force relogin
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: WARNING Serializing object of type list that is 312024 bytes
+wandb: Downloading large artifact mouse_rep0:latest, 673.94MB. 1 files... 
+wandb:   1 of 1 files downloaded.  
+Done. 0:0:0.5
+/mnt/data_sda/miniconda3/envs/grelu-test/lib/python3.11/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.4.0
+INFO:root:apply_custom_head: is_conditional=False, n_tasks=3
+INFO:root:[Head] Force-replacing AdaptivePool with Identity
+INFO:root:[Loader] Loading checkpoint weights...
+INFO:root:[Loader] [92m✓ Head weights loaded successfully from checkpoint![0m
+INFO:root:[Loader] Head has 5,763 parameters, mean |weight| = 0.011187
+INFO:root:[Loader] [92mLoaded checkpoint successfully.[0m
+INFO:root:[Loader] data_params['tasks'] set to fine-tuned outputs: ['task_0', 'task_1', 'task_2']
+INFO:utils.utility_functions:Fine-tuned model loaded from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt on cuda
+INFO:utils.utility_functions:Loaded attributions from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/attributions.pkl
+INFO:__main__:Loaded 150 coordinate rows
+INFO:__main__:Loaded elements_df: 541973 rows from /mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/all_elements.csv
+INFO:__main__:Converted to native-only attributions
+INFO:__main__:Running MoDISco: all_seqs_modisco | flank=-5
+INFO:__main__:Zero-variance windows: 0
+INFO:matplotlib.font_manager:Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: In FT2Font: Can not load face (unknown file format; error code 0x2)
+INFO:utils.modeling_functions:TF-MoDISco analysis completed
+INFO:utils.enrichment_functions:Loading motifs from /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/all_seqs_modisco/masked_-5bp_flank/modisco_report.h5
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Motifs written to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/all_seqs_modisco/masked_-5bp_flank/combined.meme
+INFO:__main__:MoDISco analysis complete.
+Using loss: mse
+[INFO] change_head: Intercepted final activation. Swapping Head Activation to nn.Identity().
+Using completed attributions
+attrs shape before slicing: (150, 4, 524288)
+attrs shape after slicing: (150, 4, 5000)
+Running modisco
+18 positive and 14 negative patterns were found.
+Writing modisco output
+Creating sequence logos
+Creating html report
+[23:19:54] ### ae_150_orig step3
+WARNING:__main__:Could not parse flank from source_flank; passing full sequences to FIMO
+INFO:utils.utility_functions:Experiment directory set up at /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig
+INFO:__main__:Using motifs from: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:__main__:Loaded 150 coordinate rows
+INFO:__main__:FASTA written for 'all_seqs': 150 sequences → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/fasta_files/all_seqs.fa
+INFO:__main__:Registered pre-built control FASTA 'tnf_controls_seqs' → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+INFO:__main__:Enrichment: all_seqs vs tnf_controls_seqs
+INFO:__main__:Removing overlaps from control (tnf_controls_seqs)...
+INFO:utils.sequence_functions:Loaded 150 sequences from primary: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/fasta_files/all_seqs.fa
+INFO:utils.sequence_functions:Removed 150 overlapping sequences from control (1456 → 1306)
+INFO:utils.sequence_functions:Filtered control written to: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa
+INFO:utils.enrichment_functions:Starting enrichment analysis → /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs
+INFO:utils.enrichment_functions:Running SEA: sea --verbosity 1 --oc /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea --thresh 1000000.0 --align center --p /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/fasta_files/all_seqs.fa --n /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs_no_overlaps_all_seqs.fa --m /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/all_seqs_modisco/masked_-5bp_flank/forward.meme
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/sea/sea_enrichment_scatter.png
+INFO:utils.enrichment_functions:Loaded 32 motifs for FIMO.
+INFO:utils.enrichment_functions:FIMO: 150 primary seqs, 1306 control seqs
+INFO:utils.enrichment_functions:FIMO results saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment.csv
+INFO:utils.enrichment_functions:Plot saved to /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/ae_150_orig/enrichment/all_seqs_modisco/all_seqs_vs_tnf_controls_seqs/fimo/fimo_enrichment_scatter.png
+INFO:__main__:Enrichment analysis complete.
+[23:44:03] ### ae_150_orig done
+ALL AE SETS DONE

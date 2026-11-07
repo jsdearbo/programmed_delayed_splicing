@@ -1,0 +1,43 @@
+experiment_dir: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/io_50_orig
+coord_file_path: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/manuscript_runs/bottom_50_introns.csv
+gtf_file: /mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/gencode.vM23.annotation.gtf
+species: mouse
+model_selection: fine_tuned
+checkpoint_path: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/weights/borzoi_mm10_delayed_splicing_finetuned.ckpt
+task_id: ENCFF575SGC
+centering_mode: intron_only
+attr_respect_to: intron_only
+attribution_method: inputxgradient
+name_col: intron_name
+mask_mode: intron_only
+flank:
+- -5
+modisco_len: 5000
+groupby_column: null
+dedupe_overlaps: true
+enrichment:
+  run_sea: true
+  run_fimo: true
+  source_subset: all_seqs_modisco
+  source_flank: masked_-5bp_flank
+  control_fasta: /mnt/data_sda/jdearborn/scratch/elife_delay_splice/results/rerun2026/tnf_controls_seqs.fa
+  comparisons:
+  - primary: all
+    control: tnf_controls
+bigwig_dir: /mnt/data_sda/jdearborn/scratch/splice_data_candidates/tc8/mm10/bw_no_norm
+motif_mapping:
+  modisco_window: 5000
+  model_seq_len: 524288
+  selection_method: modiscolite
+  attr_respect_to: intron_only
+  plot:
+    modes:
+    - combined
+    - separate
+    figsize:
+    - 20
+    - 1.5
+    topN: 5
+    colors:
+      pos: royalblue
+      neg: crimson

@@ -31,6 +31,7 @@ env/
 
 # Experiment outputs (keep configs, ignore data)
 outputs/
+results/
 testing/
 wandb/
 weights/
